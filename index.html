@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lịch Học Tin Học</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --primary: #1a3a8f;
+    --primary-light: #2952c4;
+    --accent1: #e63946;
+    --accent2: #f4a261;
+    --accent3: #2a9d8f;
+    --accent4: #7b2d8b;
+    --text: #1a1a2e;
+    --text-muted: #5a6480;
+    --border: #d0d8f0;
+    --header-bg: #1a3a8f;
+    --shadow: 0 4px 24px rgba(26,58,143,0.10);
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 60px 0;
+  }
+
+  /* HERO HEADER */
+  .hero {
+    background: linear-gradient(135deg, #1a3a8f 0%, #2952c4 60%, #7b2d8b 100%);
+    color: white;
+    text-align: center;
+    padding: 52px 24px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .hero-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+    display: block;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .hero h1 {
+    font-family: 'Lexend', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .hero p {
+    font-size: 1rem;
+    opacity: 0.85;
+    font-weight: 300;
+  }
+
+  /* NAV PILLS */
+  .nav-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 24px 20px 10px;
+    background: white;
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(26,58,143,0.07);
+  }
+  .nav-pills a {
+    text-decoration: none;
+    font-family: 'Lexend', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 7px 18px;
+    border-radius: 50px;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  .nav-pills a.p1 { background: #eef2ff; color: var(--primary); border-color: #c0ccf5; }
+  .nav-pills a.p1:hover { background: var(--primary); color: white; }
+  .nav-pills a.p2 { background: #fff0f0; color: var(--accent1); border-color: #ffc9c9; }
+  .nav-pills a.p2:hover { background: var(--accent1); color: white; }
+  .nav-pills a.p3 { background: #fff8ee; color: #c07a10; border-color: #fad49a; }
+  .nav-pills a.p3:hover { background: var(--accent2); color: white; }
+  .nav-pills a.p4 { background: #edfaf8; color: var(--accent3); border-color: #9de0d8; }
+  .nav-pills a.p4:hover { background: var(--accent3); color: white; }
+
+  /* SECTION */
+  .section {
+    max-width: 1200px;
+    margin: 48px auto 0;
+    padding: 0 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUp 0.6s ease forwards;
+  }
+  .section:nth-child(1) { animation-delay: 0.1s; }
+  .section:nth-child(2) { animation-delay: 0.2s; }
+  .section:nth-child(3) { animation-delay: 0.3s; }
+  .section:nth-child(4) { animation-delay: 0.4s; }
+  @keyframes slideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .section-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .b1 { background: linear-gradient(135deg,#1a3a8f,#2952c4); }
+  .b2 { background: linear-gradient(135deg,#e63946,#ff6b6b); }
+  .b3 { background: linear-gradient(135deg,#f4a261,#e76f51); }
+  .b4 { background: linear-gradient(135deg,#2a9d8f,#52b788); }
+
+  .section-title {
+    font-family: 'Lexend', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .section-title span {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* TABLE WRAPPER */
+  .table-wrap {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+  }
+  .table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+
+  thead tr th {
+    padding: 13px 14px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-align: center;
+    letter-spacing: 0.3px;
+    border-right: 1px solid rgba(255,255,255,0.15);
+    white-space: nowrap;
+  }
+  thead tr th:first-child { text-align: left; min-width: 200px; }
+
+  /* Themed headers */
+  .t1 thead tr { background: linear-gradient(90deg,#1a3a8f,#2952c4); color: white; }
+  .t2 thead tr { background: linear-gradient(90deg,#e63946,#c1121f); color: white; }
+  .t3 thead tr { background: linear-gradient(90deg,#e76f51,#f4a261); color: white; }
+  .t4 thead tr { background: linear-gradient(90deg,#2a9d8f,#52b788); color: white; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f5f7ff; }
+
+  tbody td {
+    padding: 12px 14px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+  tbody td:last-child { border-right: none; }
+  tbody td:first-child {
+    text-align: left;
+    background: #f8faff;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .class-name {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--primary);
+    display: block;
+  }
+  .class-desc {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-top: 2px;
+    display: block;
+    line-height: 1.35;
+  }
+
+  /* Time chips */
+  .time-chip {
+    display: inline-block;
+    padding: 5px 11px;
+    border-radius: 50px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 600;
+    font-size: 0.74rem;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+  }
+  .c1 { background: #eef2ff; color: #1a3a8f; border: 1.5px solid #c0ccf5; }
+  .c2 { background: #fff0f0; color: #c1121f; border: 1.5px solid #ffc9c9; }
+  .c3 { background: #fff8ee; color: #c07a10; border: 1.5px solid #fad49a; }
+  .c4 { background: #edfaf8; color: #1a6b65; border: 1.5px solid #9de0d8; }
+
+  tbody tr:nth-child(even) td:first-child { background: #f5f7ff; }
+
+  /* Alt row colors per table */
+  .t2 tbody tr:hover { background: #fff5f5; }
+  .t3 tbody tr:hover { background: #fffaf5; }
+  .t4 tbody tr:hover { background: #f0faf8; }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  /* Divider */
+  .divider {
+    max-width: 1200px;
+    margin: 44px auto 0;
+    padding: 0 20px;
+    border-top: 2px dashed var(--border);
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 52px;
+    padding: 24px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+  }
+  footer strong { color: var(--primary); }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .table-wrap { overflow-x: auto; }
+    .table-wrap table { min-width: 560px; }
+    .hero h1 { font-size: 1.6rem; }
+    .nav-pills a { font-size: 0.76rem; padding: 6px 13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-icon">💻</span>
+  <h1>Lịch Học Tin Học</h1>
+  <p>Trung tâm tin học – Lịch các lớp học theo tuần</p>
+</div>
+
+<!-- NAV -->
+<div class="nav-pills">
+  <a href="#table1" class="p1">📋 Toàn bộ lịch học</a>
+  <a href="#table2" class="p2">🆕 Lớp Tin học Mới</a>
+  <a href="#table3" class="p3">📚 Lớp Tin học Ứng dụng</a>
+  <a href="#table4" class="p4">🤖 Python & Robotic</a>
+</div>
+
+<!-- ========== TABLE 1: TOÀN BỘ ========== -->
+<div class="section" id="table1">
+  <div class="section-header">
+    <div class="section-badge b1">📋</div>
+    <div class="section-title">
+      Toàn bộ lịch học
+      <span>Tổng hợp tất cả các lớp trong tuần</span>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table class="t1">
+      <thead>
+        <tr>
+          <th>Lớp / Thời gian</th>
+          <th>Thứ 2</th>
+          <th>Thứ 3</th>
+          <th>Thứ 4</th>
+          <th>Thứ 5</th>
+          <th>Thứ 6</th>
+          <th>Thứ 7</th>
+          <th>Chủ Nhật</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span class="class-name">New – Tin học ứng dụng 1</span>
+            <span class="class-desc">Phù hợp lớp 2 và 3</span>
+          </td>
+          <td></td>
+          <td><span class="time-chip c1">17h30 – 19h00</span></td>
+          <td></td>
+          <td><span class="time-chip c1">17h30 – 19h00</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">New – Tin học ứng dụng 2</span>
+            <span class="class-desc">Phù hợp lớp 2 và 3</span>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><span class="time-chip c1">7h45 – 9h15</span></td>
+          <td><span class="time-chip c1">7h45 – 9h15</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">New – Tin học ứng dụng 3</span>
+            <span class="class-desc">Phù hợp lớp 4 và 5</span>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><span class="time-chip c1">15h30 – 17h00</span></td>
+          <td><span class="time-chip c1">15h30 – 17h00</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Tin học ứng dụng 4/1</span>
+            <span class="class-desc">Lớp 3 lên 4, đang học K3/1 của Bitbybit</span>
+          </td>
+          <td><span class="time-chip c2">8h00 – 9h30</span></td>
+          <td></td>
+          <td><span class="time-chip c2">8h00 – 9h30</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Tin học ứng dụng 4/2</span>
+            <span class="class-desc">Lớp 3 lên 4, đang học K3/3 của Bitbybit</span>
+          </td>
+          <td></td>
+          <td><span class="time-chip c2">7h45 – 9h15</span></td>
+          <td></td>
+          <td><span class="time-chip c2">7h45 – 9h15</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Tin học ứng dụng 5</span>
+            <span class="class-desc">Lớp 4 lên 5, đang học K45/1, K45/3 của Bitbybit</span>
+          </td>
+          <td><span class="time-chip c2">15h30 – 17h00</span></td>
+          <td></td>
+          <td><span class="time-chip c2">15h30 – 17h00</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Python/Scratch (Cơ bản)</span>
+            <span class="class-desc">Đã biết dùng máy tính, muốn làm quen lập trình</span>
+          </td>
+          <td></td>
+          <td><span class="time-chip c3">15h30 – 17h00</span></td>
+          <td></td>
+          <td><span class="time-chip c3">15h30 – 17h00</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Python (Nâng cao)</span>
+            <span class="class-desc">Đã thành thạo python/scratch cơ bản, ôn thi tin học trẻ bảng A</span>
+          </td>
+          <td><span class="time-chip c3">18h00 – 19h30</span></td>
+          <td></td>
+          <td><span class="time-chip c3">18h00 – 19h30</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Tin học ứng dụng THCS</span>
+            <span class="class-desc">Phù hợp học sinh THCS</span>
+          </td>
+          <td></td>
+          <td><span class="time-chip c2">9h30 – 11h00</span></td>
+          <td></td>
+          <td><span class="time-chip c2">9h30 – 11h00</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Python/C++ (THCS)</span>
+            <span class="class-desc">Đã thành thạo python/scratch cơ bản, ôn thi tin học trẻ bảng B</span>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><span class="time-chip c4">17h30 – 19h00</span></td>
+          <td><span class="time-chip c4">17h30 – 19h00</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">ROBOTIC</span>
+            <span class="class-desc">Có kỹ năng lắp ráp mô hình, muốn làm quen lập trình robot</span>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><span class="time-chip c4">9h30 – 11h30</span></td>
+          <td><span class="time-chip c4">9h30 – 11h30</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== TABLE 2: LỚP TIN HỌC MỚI ========== -->
+<div class="divider"></div>
+<div class="section" id="table2">
+  <div class="section-header">
+    <div class="section-badge b2">🆕</div>
+    <div class="section-title">
+      Lớp Tin học Mới (New)
+      <span>Dành cho học sinh lớp 2 – 5 mới bắt đầu</span>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table class="t2">
+      <thead>
+        <tr>
+          <th>Lớp / Thời gian</th>
+          <th>Thứ 2</th>
+          <th>Thứ 3</th>
+          <th>Thứ 4</th>
+          <th>Thứ 5</th>
+          <th>Thứ 6</th>
+          <th>Thứ 7</th>
+          <th>Chủ Nhật</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span class="class-name">New – Tin học ứng dụng 1</span>
+            <span class="class-desc">Phù hợp lớp 2 và 3</span>
+          </td>
+          <td></td>
+          <td><span class="time-chip c2">17h30 – 19h00</span></td>
+          <td></td>
+          <td><span class="time-chip c2">17h30 – 19h00</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">New – Tin học ứng dụng 2</span>
+            <span class="class-desc">Phù hợp lớp 2 và 3</span>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><span class="time-chip c2">7h45 – 9h15</span></td>
+          <td><span class="time-chip c2">7h45 – 9h15</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">New – Tin học ứng dụng 3</span>
+            <span class="class-desc">Phù hợp lớp 4 và 5</span>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><span class="time-chip c2">15h30 – 17h00</span></td>
+          <td><span class="time-chip c2">15h30 – 17h00</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== TABLE 3: TIN HỌC ỨNG DỤNG ========== -->
+<div class="divider"></div>
+<div class="section" id="table3">
+  <div class="section-header">
+    <div class="section-badge b3">📚</div>
+    <div class="section-title">
+      Tin học Ứng dụng & THCS
+      <span>Các lớp 4/1, 4/2, 5 và THCS – học theo chương trình Bitbybit</span>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table class="t3">
+      <thead>
+        <tr>
+          <th>Lớp / Thời gian</th>
+          <th>Thứ 2</th>
+          <th>Thứ 3</th>
+          <th>Thứ 4</th>
+          <th>Thứ 5</th>
+          <th>Thứ 6</th>
+          <th>Thứ 7</th>
+          <th>Chủ Nhật</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span class="class-name">Tin học ứng dụng 4/1</span>
+            <span class="class-desc">Lớp 3 lên 4, đang học K3/1 của Bitbybit</span>
+          </td>
+          <td><span class="time-chip c3">8h00 – 9h30</span></td>
+          <td></td>
+          <td><span class="time-chip c3">8h00 – 9h30</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Tin học ứng dụng 4/2</span>
+            <span class="class-desc">Lớp 3 lên 4, đang học K3/3 của Bitbybit</span>
+          </td>
+          <td></td>
+          <td><span class="time-chip c3">7h45 – 9h15</span></td>
+          <td></td>
+          <td><span class="time-chip c3">7h45 – 9h15</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Tin học ứng dụng 5</span>
+            <span class="class-desc">Lớp 4 lên 5, đang học K45/1, K45/3 của Bitbybit</span>
+          </td>
+          <td><span class="time-chip c3">15h30 – 17h00</span></td>
+          <td></td>
+          <td><span class="time-chip c3">15h30 – 17h00</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Tin học ứng dụng THCS</span>
+            <span class="class-desc">Phù hợp học sinh THCS</span>
+          </td>
+          <td></td>
+          <td><span class="time-chip c3">9h30 – 11h00</span></td>
+          <td></td>
+          <td><span class="time-chip c3">9h30 – 11h00</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== TABLE 4: PYTHON & ROBOTIC ========== -->
+<div class="divider"></div>
+<div class="section" id="table4">
+  <div class="section-header">
+    <div class="section-badge b4">🤖</div>
+    <div class="section-title">
+      Python / Scratch & Robotic
+      <span>Lập trình và robot – từ cơ bản đến nâng cao</span>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table class="t4">
+      <thead>
+        <tr>
+          <th>Lớp / Thời gian</th>
+          <th>Thứ 2</th>
+          <th>Thứ 3</th>
+          <th>Thứ 4</th>
+          <th>Thứ 5</th>
+          <th>Thứ 6</th>
+          <th>Thứ 7</th>
+          <th>Chủ Nhật</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span class="class-name">Python/Scratch (Cơ bản)</span>
+            <span class="class-desc">Đã biết dùng máy tính, muốn làm quen lập trình</span>
+          </td>
+          <td></td>
+          <td><span class="time-chip c4">15h30 – 17h00</span></td>
+          <td></td>
+          <td><span class="time-chip c4">15h30 – 17h00</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Python (Nâng cao)</span>
+            <span class="class-desc">Đã thành thạo python/scratch, ôn thi tin học trẻ bảng A</span>
+          </td>
+          <td><span class="time-chip c4">18h00 – 19h30</span></td>
+          <td></td>
+          <td><span class="time-chip c4">18h00 – 19h30</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">Python/C++ (THCS)</span>
+            <span class="class-desc">Đã thành thạo python/scratch, ôn thi tin học trẻ bảng B</span>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><span class="time-chip c4">17h30 – 19h00</span></td>
+          <td><span class="time-chip c4">17h30 – 19h00</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="class-name">ROBOTIC</span>
+            <span class="class-desc">Có kỹ năng lắp ráp mô hình, muốn làm quen lập trình robot</span>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><span class="time-chip c4">9h30 – 11h30</span></td>
+          <td><span class="time-chip c4">9h30 – 11h30</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer>
+  <strong>Trung tâm Tin học</strong> · Lịch học cập nhật theo tuần · © 2025
+</footer>
+
+</body>
+</html>
