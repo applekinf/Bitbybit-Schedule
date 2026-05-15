@@ -3,1060 +3,1136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lớp học BitByBit Kid's - Phú Sơn 1, Hòa Tiến, TP Đà Nẵng</title>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Lớp Tin Học BitByBit Kid's – Hòa Tiến, Đà Nẵng</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #f0f4ff;
-    --surface: #ffffff;
-    --primary: #1a3a8f;
-    --primary-light: #2952c4;
-    --accent1: #e63946;
-    --accent2: #f4a261;
-    --accent3: #2a9d8f;
-    --accent4: #7b2d8b;
-    --text: #1a1a2e;
-    --text-muted: #5a6480;
-    --border: #d0d8f0;
-    --header-bg: #1a3a8f;
-    --shadow: 0 4px 24px rgba(26,58,143,0.10);
-    --radius: 14px;
-  }
+:root {
+  --blue:    #1a3a8f;
+  --blue2:   #2952c4;
+  --red:     #e63946;
+  --orange:  #f4a261;
+  --teal:    #2a9d8f;
+  --purple:  #7b2d8b;
+  --text:    #1a1a2e;
+  --muted:   #5a6480;
+  --border:  #d0d8f0;
+  --bg:      #f0f4ff;
+  --white:   #ffffff;
+  --shadow:  0 4px 24px rgba(26,58,143,0.10);
+  --radius:  14px;
+}
 
-  * { margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: 'Be Vietnam Pro', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 0 0 60px 0;
-  }
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
 
-  /* HERO HEADER */
-  .hero {
-    background: linear-gradient(135deg, #1a3a8f 0%, #2952c4 60%, #7b2d8b 100%);
-    color: white;
-    text-align: center;
-    padding: 52px 24px 44px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    pointer-events: none;
-  }
-  .hero-logo {
-    width: 120px;
-    height: 100px;
-    object-fit: contain;
-    margin-bottom: 12px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    animation: float 3s ease-in-out infinite;
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
-  }
-  @keyframes float {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-  .hero h1 {
-    font-family: 'Lexend', sans-serif;
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    margin-bottom: 8px;
-  }
-  .hero p {
-    font-size: 1rem;
-    opacity: 0.85;
-    font-weight: 300;
-  }
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, #1a3a8f 0%, #2952c4 55%, #7b2d8b 100%);
+  color: white;
+  text-align: center;
+  padding: 48px 24px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.hero-logo {
+  width: 110px; height: 90px;
+  object-fit: contain;
+  display: block; margin: 0 auto 14px;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.25));
+  position: relative; z-index: 1;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+.hero h1 {
+  font-family: 'Lexend', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+  position: relative; z-index: 1;
+}
+.hero p {
+  font-size: 0.92rem;
+  opacity: 0.85;
+  font-weight: 300;
+  position: relative; z-index: 1;
+}
 
-  /* NAV PILLS */
-  .nav-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    padding: 24px 20px 10px;
-    background: white;
-    border-bottom: 2px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 12px rgba(26,58,143,0.07);
-  }
-  .nav-pills a {
-    text-decoration: none;
-    font-family: 'Lexend', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 600;
-    padding: 7px 18px;
-    border-radius: 50px;
-    transition: all 0.2s;
-    border: 2px solid transparent;
-  }
-  .nav-pills a.p1 { background: #eef2ff; color: var(--primary); border-color: #c0ccf5; }
-  .nav-pills a.p1:hover { background: var(--primary); color: white; }
-  .nav-pills a.p2 { background: #fff0f0; color: var(--accent1); border-color: #ffc9c9; }
-  .nav-pills a.p2:hover { background: var(--accent1); color: white; }
-  .nav-pills a.p3 { background: #fff8ee; color: #c07a10; border-color: #fad49a; }
-  .nav-pills a.p3:hover { background: var(--accent2); color: white; }
-  .nav-pills a.p4 { background: #edfaf8; color: var(--accent3); border-color: #9de0d8; }
-  .nav-pills a.p4:hover { background: var(--accent3); color: white; }
+/* ── TAB NAV ── */
+.tab-nav {
+  display: flex;
+  background: white;
+  border-bottom: 2px solid var(--border);
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: 0 2px 12px rgba(26,58,143,0.08);
+}
+.tab-btn {
+  flex: 1;
+  padding: 16px 10px;
+  background: none;
+  border: none;
+  font-family: 'Lexend', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.25s;
+  border-bottom: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--blue); background: #f5f7ff; }
+.tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); background: #f0f4ff; }
+.tab-btn .tab-icon { font-size: 1.1rem; }
 
-  /* SECTION */
-  .section {
-    max-width: 1200px;
-    margin: 48px auto 0;
-    padding: 0 20px;
-    opacity: 0;
-    transform: translateY(30px);
-    animation: slideUp 0.6s ease forwards;
-  }
-  .section:nth-child(1) { animation-delay: 0.1s; }
-  .section:nth-child(2) { animation-delay: 0.2s; }
-  .section:nth-child(3) { animation-delay: 0.3s; }
-  .section:nth-child(4) { animation-delay: 0.4s; }
-  @keyframes slideUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
+/* ── TAB PANELS ── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 18px;
-  }
-  .section-badge {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-  .b1 { background: linear-gradient(135deg,#1a3a8f,#2952c4); }
-  .b2 { background: linear-gradient(135deg,#e63946,#ff6b6b); }
-  .b3 { background: linear-gradient(135deg,#f4a261,#e76f51); }
-  .b4 { background: linear-gradient(135deg,#2a9d8f,#52b788); }
+/* ── WRAPPER ── */
+.panel-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 36px 20px 60px;
+}
 
-  .section-title {
-    font-family: 'Lexend', sans-serif;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .section-title span {
-    display: block;
-    font-size: 0.78rem;
-    font-weight: 400;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
+/* ── PANEL TITLE ── */
+.panel-title {
+  font-family: 'Lexend', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.panel-subtitle {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
 
-  /* TABLE WRAPPER */
-  .table-wrap {
-    background: var(--surface);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    border: 1.5px solid var(--border);
-  }
-  .table-wrap table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-  }
+/* ── TABLE ── */
+.table-wrap {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  overflow-x: auto;
+}
+.table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.81rem;
+  min-width: 700px;
+}
+thead tr { background: linear-gradient(90deg, #1a3a8f, #2952c4); color: white; }
+thead th {
+  padding: 13px 12px;
+  font-family: 'Lexend', sans-serif;
+  font-weight: 600;
+  font-size: 0.76rem;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  white-space: nowrap;
+}
+thead th:first-child { text-align: left; min-width: 195px; }
+thead th:last-child  { min-width: 105px; border-right: none; }
 
-  thead tr th {
-    padding: 13px 14px;
-    font-family: 'Lexend', sans-serif;
-    font-weight: 600;
-    font-size: 0.78rem;
-    text-align: center;
-    letter-spacing: 0.3px;
-    border-right: 1px solid rgba(255,255,255,0.15);
-    white-space: nowrap;
-  }
-  thead tr th:first-child { text-align: left; min-width: 200px; }
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+tbody tr:last-child  { border-bottom: none; }
+tbody tr:hover       { background: #f5f7ff; }
+tbody tr:nth-child(even) td:first-child { background: #f5f7ff; }
 
-  /* Themed headers */
-  .t1 thead tr { background: linear-gradient(90deg,#1a3a8f,#2952c4); color: white; }
-  .t2 thead tr { background: linear-gradient(90deg,#e63946,#c1121f); color: white; }
-  .t3 thead tr { background: linear-gradient(90deg,#e76f51,#f4a261); color: white; }
-  .t4 thead tr { background: linear-gradient(90deg,#2a9d8f,#52b788); color: white; }
+tbody td {
+  padding: 11px 12px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+  vertical-align: middle;
+}
+tbody td:last-child  { border-right: none; }
+tbody td:first-child {
+  text-align: left;
+  background: #f8faff;
+}
 
-  tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s;
-  }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: #f5f7ff; }
+.class-name {
+  font-family: 'Lexend', sans-serif;
+  font-weight: 700;
+  font-size: 0.83rem;
+  color: var(--blue);
+  display: block;
+}
+.class-desc {
+  font-size: 0.70rem;
+  color: var(--muted);
+  font-weight: 400;
+  margin-top: 2px;
+  display: block;
+  line-height: 1.35;
+}
+.time-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-family: 'Lexend', sans-serif;
+  font-weight: 600;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.c1 { background: #eef2ff; color: #1a3a8f; border: 1.5px solid #c0ccf5; }
+.c2 { background: #fff0f0; color: #c1121f; border: 1.5px solid #ffc9c9; }
+.c3 { background: #fff8ee; color: #c07a10; border: 1.5px solid #fad49a; }
+.c4 { background: #edfaf8; color: #1a6b65; border: 1.5px solid #9de0d8; }
 
-  tbody td {
-    padding: 12px 14px;
-    text-align: center;
-    border-right: 1px solid var(--border);
-    vertical-align: middle;
-    line-height: 1.4;
-  }
-  tbody td:last-child { border-right: none; }
-  tbody td:first-child {
-    text-align: left;
-    background: #f8faff;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .class-name {
-    font-family: 'Lexend', sans-serif;
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: var(--primary);
-    display: block;
-  }
-  .class-desc {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    font-weight: 400;
-    margin-top: 2px;
-    display: block;
-    line-height: 1.35;
-  }
-
-  /* Time chips */
-  .time-chip {
-    display: inline-block;
-    padding: 5px 11px;
-    border-radius: 50px;
-    font-family: 'Lexend', sans-serif;
-    font-weight: 600;
-    font-size: 0.74rem;
-    white-space: nowrap;
-    letter-spacing: 0.2px;
-  }
-  .c1 { background: #eef2ff; color: #1a3a8f; border: 1.5px solid #c0ccf5; }
-  .c2 { background: #fff0f0; color: #c1121f; border: 1.5px solid #ffc9c9; }
-  .c3 { background: #fff8ee; color: #c07a10; border: 1.5px solid #fad49a; }
-  .c4 { background: #edfaf8; color: #1a6b65; border: 1.5px solid #9de0d8; }
-
-  tbody tr:nth-child(even) td:first-child { background: #f5f7ff; }
-
-  /* Alt row colors per table */
-  .t2 tbody tr:hover { background: #fff5f5; }
-  .t3 tbody tr:hover { background: #fffaf5; }
-  .t4 tbody tr:hover { background: #f0faf8; }
-
-  /* Legend */
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 14px;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-  }
-  .legend-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 5px;
-    vertical-align: middle;
-  }
-
-  /* Divider */
-  .divider {
-    max-width: 1200px;
-    margin: 44px auto 0;
-    padding: 0 20px;
-    border-top: 2px dashed var(--border);
-  }
-
-  /* Footer */
-  footer {
-    text-align: center;
-    margin-top: 52px;
-    padding: 24px;
-    color: var(--text-muted);
-    font-size: 0.78rem;
-  }
-  footer strong { color: var(--primary); }
-
-  /* Responsive */
-  @media (max-width: 700px) {
-    .table-wrap { overflow-x: auto; }
-    .table-wrap table { min-width: 560px; }
-    .hero h1 { font-size: 1.6rem; }
-    .nav-pills a { font-size: 0.76rem; padding: 6px 13px; }
-  }
+/* Học phí cell */
+td.fee-cell {
+  background: #fff8f0;
+  text-align: center;
+}
+.fee-badge {
+  display: inline-block;
+  font-family: 'Lexend', sans-serif;
+  font-weight: 800;
+  font-size: 0.88rem;
+  color: var(--red);
+  background: #fff0f0;
+  border: 1.5px solid #ffc9c9;
+  border-radius: 50px;
+  padding: 4px 12px;
+}
 
 .new-badge {
   display: inline-block;
   vertical-align: middle;
-  margin-left: 6px;
-  position: relative;
-  top: -2px;
+  margin-left: 5px;
+  position: relative; top: -2px;
 }
-.new-badge img {
-  width: 36px;
-  height: auto;
-  display: inline;
-}
-body {
-  background-color: #eef2ff;
-  background-image: 
-    radial-gradient(circle at 25% 25%, rgba(41,82,196,0.08) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(123,45,139,0.08) 0%, transparent 50%),
-    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232952c4' fill-opacity='0.04'%3E%3Cpath d='M20 20.5V18H0v5h5v5H0v5h20v-9.5zm-2 4.5v5H7v-5h11zm0-2H7v-5h11v5z'/%3E%3C/g%3E%3C/svg%3E");
-  background-attachment: fixed;
-}
+.new-badge img { width: 32px; height: auto; display: inline; }
+
+/* Table note */
 .table-note {
-  margin-top: 10px;
+  margin-top: 12px;
   padding: 10px 16px;
   background: #f0f4ff;
-  border-left: 4px solid var(--primary);
+  border-left: 4px solid var(--blue);
   border-radius: 0 8px 8px 0;
+  font-size: 0.76rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.table-note strong { color: var(--blue); }
+
+/* ── ACCORDION (Tab 2) ── */
+.course-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.accordion {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1.5px solid var(--border);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.accordion:hover { box-shadow: 0 8px 32px rgba(26,58,143,0.13); }
+
+.acc-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.acc-header:hover { background: #f8faff; }
+
+.acc-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.ai-blue   { background: linear-gradient(135deg, #1a3a8f, #2952c4); }
+.ai-orange { background: linear-gradient(135deg, #f4a261, #e76f51); }
+.ai-teal   { background: linear-gradient(135deg, #2a9d8f, #52b788); }
+
+.acc-info { flex: 1; }
+.acc-title {
+  font-family: 'Lexend', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.acc-sub {
   font-size: 0.78rem;
-  color: var(--text-muted);
-  line-height: 1.6;
+  color: var(--muted);
+  margin-top: 3px;
 }
-.table-note strong {
-  color: var(--primary);
+
+.acc-arrow {
+  font-size: 1.2rem;
+  color: var(--muted);
+  transition: transform 0.3s;
+  flex-shrink: 0;
 }
+.accordion.open .acc-arrow { transform: rotate(180deg); }
+
+.acc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.accordion.open .acc-body { max-height: 2000px; }
+
+.acc-content {
+  padding: 0 24px 28px;
+  border-top: 1.5px solid var(--border);
+}
+
+/* Course detail layout */
+.course-detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+@media (max-width: 700px) {
+  .course-detail { grid-template-columns: 1fr; }
+}
+
+.course-text h3 {
+  font-family: 'Lexend', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 12px;
+}
+
+.course-points {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.course-points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.83rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+.course-points li::before {
+  content: '✅';
+  font-size: 0.75rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.course-levels {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+.level-card {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border-left: 4px solid;
+}
+.level-card.lv1 { background: #eef2ff; border-color: var(--blue); }
+.level-card.lv2 { background: #fff8ee; border-color: var(--orange); }
+.level-card.lv3 { background: #edfaf8; border-color: var(--teal); }
+.level-card h4 {
+  font-family: 'Lexend', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.level-card p { font-size: 0.76rem; color: var(--muted); line-height: 1.4; }
+
+/* Course images grid */
+.course-imgs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.course-img-box {
+  background: linear-gradient(135deg, #e8eeff, #dce6ff);
+  border-radius: 10px;
+  aspect-ratio: 4/3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-align: center;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  position: relative;
+}
+.course-img-box img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: absolute; inset: 0;
+}
+.course-img-box .img-label {
+  position: relative; z-index: 1;
+  font-size: 2rem;
+  margin-bottom: 6px;
+}
+.course-img-box .img-caption {
+  position: relative; z-index: 1;
+  font-size: 0.68rem;
+  color: var(--muted);
+  padding: 0 8px;
+}
+
+/* Fee info bar */
+.fee-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: #fff0f0;
+  border-radius: 10px;
+  border: 1.5px solid #ffc9c9;
+}
+.fee-bar .fee-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.fee-bar .fee-val {
+  font-family: 'Lexend', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--red);
+}
+
+/* ── GALLERY (Tab 3) ── */
+.gallery-intro {
+  background: white;
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+  border: 1.5px solid var(--border);
+  font-size: 0.84rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.gallery-section-title {
+  font-family: 'Lexend', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 28px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.gallery-section-title::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.photo-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(26,58,143,0.08);
+  border: 1.5px solid var(--border);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.photo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(26,58,143,0.15);
+}
+
+.photo-placeholder {
+  aspect-ratio: 4/3;
+  background: linear-gradient(135deg, #e8eeff 0%, #d8e4ff 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.photo-placeholder img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: absolute; inset: 0;
+}
+.photo-placeholder .ph-icon {
+  font-size: 2.4rem;
+  position: relative; z-index: 1;
+}
+.photo-placeholder .ph-num {
+  font-family: 'Lexend', sans-serif;
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 6px;
+  position: relative; z-index: 1;
+}
+
+/* Different placeholder colors */
+.ph-blue  { background: linear-gradient(135deg, #dce6ff, #c8d8ff); }
+.ph-red   { background: linear-gradient(135deg, #ffe8e8, #ffd0d0); }
+.ph-green { background: linear-gradient(135deg, #e0f8f4, #c8efe8); }
+.ph-orange{ background: linear-gradient(135deg, #fff3e0, #ffe0b8); }
+.ph-purple{ background: linear-gradient(135deg, #f3e8ff, #e8d0ff); }
+
+.photo-caption {
+  padding: 10px 12px;
+  font-size: 0.73rem;
+  color: var(--muted);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* Upload hint */
+.upload-hint {
+  margin-top: 28px;
+  padding: 16px 20px;
+  background: linear-gradient(90deg, #eef2ff, #f5f0ff);
+  border-radius: 10px;
+  border: 1.5px dashed #c0ccf5;
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.7;
+}
+.upload-hint strong { color: var(--blue); }
+.upload-hint code {
+  background: #e8eeff;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.82rem;
+  color: var(--blue2);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 28px 24px;
+  background: white;
+  border-top: 1.5px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+footer strong { color: var(--blue); }
 </style>
 </head>
 <body>
 
 <!-- HERO -->
 <div class="hero">
-  <img src="images/logo.png" alt="Logo Bitbybit Kid's" class="hero-logo">
-  <h1>LỚP TIN HỌC BITBYBIT KID'S</h1>
-  <p>Phú Sơn 1, Xã Hòa Tiến, TP Đà Nẵng - Liên hệ: 0934.929.377 (cô Tiên)</p>
+  <img src="images/logo.png" alt="Logo BitByBit Kid's" class="hero-logo">
+  <h1>LỚP TIN HỌC BITBYBIT KID'S</h1>
+  <p>Phú Sơn 1, Xã Hòa Tiến, TP Đà Nẵng &nbsp;·&nbsp; Liên hệ: <strong>0934.929.377</strong> (cô Tiên)</p>
 </div>
 
-<!-- NAV -->
-<div class="nav-pills">
-  <a href="#table1" class="p1">📋 Toàn bộ lịch học</a>
-  <a href="#table2" class="p2">🆕 Lớp Tin học Mới</a>
-  <a href="#table3" class="p3">💻 Lớp Tin học Ứng dụng</a>
-  <a href="#table4" class="p4">🤖 Python & Robotic</a>
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('schedule', this)">
+    <span class="tab-icon">📋</span> Thời khóa biểu
+  </button>
+  <button class="tab-btn" onclick="switchTab('courses', this)">
+    <span class="tab-icon">📚</span> Nội dung học
+  </button>
+  <button class="tab-btn" onclick="switchTab('gallery', this)">
+    <span class="tab-icon">🖼️</span> Hình ảnh hoạt động
+  </button>
 </div>
 
-<!-- ========== TABLE 1: TOÀN BỘ ========== -->
-<div class="section" id="table11">
-  <div class="section-header">
-    <div class="section-badge b1">📋</div>
-    <div class="section-title">
-      Toàn bộ lịch học (MỚI)
-      <span>Tổng hợp tất cả các lớp trong tuần</span>
+<!-- ════════════════════════════════════════
+     TAB 1: THỜI KHÓA BIỂU
+═════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-schedule">
+  <div class="panel-wrap">
+    <div class="panel-title">📋 Toàn bộ lịch học (MỚI)</div>
+    <div class="panel-subtitle">Cập nhật lịch các lớp – Hè 2026</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Lớp / Thời gian</th>
+            <th>Thứ 2</th><th>Thứ 3</th><th>Thứ 4</th><th>Thứ 5</th><th>Thứ 6</th><th>Thứ 7</th><th>Chủ Nhật</th>
+            <th>Học phí/tháng</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span class="class-name">ROBOTIC (7/2026) <span class="new-badge"><img src="images/new.png" alt="new"></span></span>
+              <span class="class-desc">Có kỹ năng lắp ráp mô hình, muốn làm quen lập trình robot</span>
+            </td>
+            <td></td><td></td><td></td><td></td><td></td>
+            <td><span class="time-chip c4">7h30 – 9h15</span></td>
+            <td><span class="time-chip c4">7h30 – 9h15</span></td>
+            <td class="fee-cell"><span class="fee-badge">500k</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="class-name">Tin học ứng dụng 1 <span class="new-badge"><img src="images/new.png" alt="new"></span></span>
+              <span class="class-desc">Phù hợp lớp 2 và lớp 3</span>
+            </td>
+            <td></td>
+            <td><span class="time-chip c1">17h30 – 19h00</span></td>
+            <td></td>
+            <td><span class="time-chip c1">17h30 – 19h00</span></td>
+            <td></td><td></td><td></td>
+            <td class="fee-cell"><span class="fee-badge">300k</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="class-name">Tin học ứng dụng 2 <span class="new-badge"><img src="images/new.png" alt="new"></span></span>
+              <span class="class-desc">Phù hợp lớp 2 và lớp 3</span>
+            </td>
+            <td></td><td></td><td></td><td></td><td></td>
+            <td><span class="time-chip c1">9h30 – 11h00</span></td>
+            <td><span class="time-chip c1">9h30 – 11h00</span></td>
+            <td class="fee-cell"><span class="fee-badge">300k</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="class-name">Tin học ứng dụng 3 <span class="new-badge"><img src="images/new.png" alt="new"></span></span>
+              <span class="class-desc">Phù hợp lớp 4 và lớp 5</span>
+            </td>
+            <td></td><td></td>
+            <td><span class="time-chip c1">19h00 – 20h30</span></td>
+            <td></td><td></td>
+            <td><span class="time-chip c1">15h30 – 17h00</span></td>
+            <td></td>
+            <td class="fee-cell"><span class="fee-badge">350k</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="class-name">TH ứng dụng THCS 1 <span class="new-badge"><img src="images/new.png" alt="new"></span></span>
+              <span class="class-desc">Phù hợp học sinh THCS</span>
+            </td>
+            <td></td>
+            <td><span class="time-chip c2">9h30 – 11h00</span></td>
+            <td></td>
+            <td><span class="time-chip c2">9h30 – 11h00</span></td>
+            <td></td><td></td><td></td>
+            <td class="fee-cell"><span class="fee-badge">400k</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="class-name">TH ứng dụng THCS 2 <span class="new-badge"><img src="images/new.png" alt="new"></span></span>
+              <span class="class-desc">Phù hợp học sinh THCS</span>
+            </td>
+            <td></td>
+            <td><span class="time-chip c2">19h00 – 20h30</span></td>
+            <td></td>
+            <td><span class="time-chip c2">19h00 – 20h30</span></td>
+            <td></td><td></td><td></td>
+            <td class="fee-cell"><span class="fee-badge">400k</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="class-name">Tin học ứng dụng 4/1</span>
+              <span class="class-desc">Lớp 3 lên 4, đang học K3/1 của Bitbybit</span>
+            </td>
+            <td><span class="time-chip c2">17h30 – 19h00</span></td>
+            <td></td>
+            <td><span class="time-chip c2">17h30 – 19h00</span></td>
+            <td></td><td></td><td></td><td></td>
+            <td class="fee-cell"><span class="fee-badge">350k</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="class-name">Tin học ứng dụng 4/2</span>
+              <span class="class-desc">Lớp 3 lên 4, đang học K3/3 của Bitbybit</span>
+            </td>
+            <td></td><td></td><td></td><td></td><td></td>
+            <td><span class="time-chip c2">17h30 – 19h00</span></td>
+            <td><span class="time-chip c2">17h30 – 19h00</span></td>
+            <td class="fee-cell"><span class="fee-badge">350k</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="class-name">Tin học ứng dụng 5</span>
+              <span class="class-desc">Lớp 4 lên 5, đang học K45/1, K45/3 của Bitbybit</span>
+            </td>
+            <td></td>
+            <td><span class="time-chip c2">15h30 – 17h00</span></td>
+            <td></td>
+            <td><span class="time-chip c2">15h30 – 17h00</span></td>
+            <td></td><td></td><td></td>
+            <td class="fee-cell"><span class="fee-badge">350k</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="class-name">Python/Scratch (Cơ bản)</span>
+              <span class="class-desc">Đã biết dùng máy tính, muốn làm quen lập trình</span>
+            </td>
+            <td></td><td></td><td></td><td></td>
+            <td><span class="time-chip c3">17h30 – 19h00</span></td>
+            <td></td>
+            <td><span class="time-chip c3">15h30 – 17h00</span></td>
+            <td class="fee-cell"><span class="fee-badge">400k</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="class-name">Python (Nâng cao)</span>
+              <span class="class-desc">Đã thành thạo python/scratch cơ bản, ôn thi tin học trẻ bảng A</span>
+            </td>
+            <td><span class="time-chip c3">19h30 – 21h00</span></td>
+            <td></td><td></td><td></td>
+            <td><span class="time-chip c3">19h30 – 21h00</span></td>
+            <td></td><td></td>
+            <td class="fee-cell"><span class="fee-badge">400k</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="class-name">Python/C++ (THCS)</span>
+              <span class="class-desc">Đã thành thạo python/scratch cơ bản, ôn thi tin học trẻ bảng B</span>
+            </td>
+            <td></td><td></td><td></td><td></td><td></td>
+            <td><span class="time-chip c4">19h00 – 20h30</span></td>
+            <td><span class="time-chip c4">19h00 – 20h30</span></td>
+            <td class="fee-cell"><span class="fee-badge">500k</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-note">
+      📌 <strong>Tin học BitByBit Kid's</strong> – Chuyên Tin học ứng dụng · Python · Scratch · Robotics &nbsp;|&nbsp;
+      📞 <strong>0934.929.377</strong> &nbsp;|&nbsp;
+      📍 Phú Sơn 1, Xã Hòa Tiến, TP Đà Nẵng
     </div>
   </div>
-  <div class="table-wrap">
-    <table class="t1">
-      <thead>
-        <tr>
-          <th>Lớp / Thời gian</th>
-          <th>Thứ 2</th>
-          <th>Thứ 3</th>
-          <th>Thứ 4</th>
-          <th>Thứ 5</th>
-          <th>Thứ 6</th>
-          <th>Thứ 7</th>
-          <th>Chủ Nhật</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <span class="class-name">ROBOTIC (7/2026) 
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Có kỹ năng lắp ráp mô hình, muốn làm quen lập trình robot</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c4">7h30 – 9h15</span></td>
-          <td><span class="time-chip c4">7h30 – 9h15</span></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 1
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp lớp 2 và lớp 3</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c1">17h30 – 19h00</span></td>
-          <td></td>
-          <td><span class="time-chip c1">17h30 – 19h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 2
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp lớp 2 và lớp 3</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c1">9h30 – 11h00</span></td>
-          <td><span class="time-chip c1">9h30 – 11h00</span></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 3
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp lớp 4 và lớp 5</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c1">19h00 – 20h30</span></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c1">15h30 – 17h00</span></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">TH ứng dụng THCS 1
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp học sinh THCS</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c2">9h30 – 11h00</span></td>
-          <td></td>
-          <td><span class="time-chip c2">9h30 – 11h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-		<tr>
-          <td>
-            <span class="class-name">TH ứng dụng THCS 2
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp học sinh THCS</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c2">19h00 – 20h30</span></td>
-          <td></td>
-          <td><span class="time-chip c2">19h00 – 20h30</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 4/1</span>
-            <span class="class-desc">Lớp 3 lên 4, đang học K3/1 của Bitbybit</span>
-          </td>
-          <td><span class="time-chip c2">17h30 – 19h00</span></td>
-          <td></td>
-          <td><span class="time-chip c2">17h30 – 19h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 4/2</span>
-            <span class="class-desc">Lớp 3 lên 4, đang học K3/3 của Bitbybit</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c2">17h30 - 19h00</span></td>
-          <td><span class="time-chip c2">17h30 - 19h00</span></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 5</span>
-            <span class="class-desc">Lớp 4 lên 5, đang học K45/1, K45/3 của Bitbybit</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c2">15h30 – 17h00</span></td>
-          <td></td>
-          <td><span class="time-chip c2">15h30 – 17h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Python/Scratch (Cơ bản)</span>
-            <span class="class-desc">Đã biết dùng máy tính, muốn làm quen lập trình</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c3">17h30 – 19h00</span></td>
-          <td></td>
-          <td><span class="time-chip c3">15h30 – 17h00</span></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Python (Nâng cao)</span>
-            <span class="class-desc">Đã thành thạo python/scratch cơ bản, ôn thi tin học trẻ bảng A</span>
-          </td>
-          <td><span class="time-chip c3">19h30 – 21h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c3">19h30 – 21h00</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Python/C++ (THCS)</span>
-            <span class="class-desc">Đã thành thạo python/scratch cơ bản, ôn thi tin học trẻ bảng B</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c4">19h00 - 20h30</span></td>
-          <td><span class="time-chip c4">19h00 - 20h30</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="table-note">
-    📌 <strong>Tin học BitByBit Kid's</strong> –Chuyên Tin học ứng dụng · Python · Scratch · Robotics &nbsp;|&nbsp; 
-    📞 <strong>0934.929.377</strong> &nbsp;|&nbsp; 
-    📍 Phú Sơn 1, Xã Hòa Tiến, TP Đà Nẵng
+</div>
+
+<!-- ════════════════════════════════════════
+     TAB 2: NỘI DUNG HỌC
+═════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-courses">
+  <div class="panel-wrap">
+    <div class="panel-title">📚 Nội dung các khóa học</div>
+    <div class="panel-subtitle">Nhấn vào từng khóa để xem chi tiết chương trình và hình ảnh</div>
+
+    <div class="course-grid">
+
+      <!-- ACCORDION 1: TIN HỌC ỨNG DỤNG -->
+      <div class="accordion" id="acc1">
+        <div class="acc-header" onclick="toggleAcc('acc1')">
+          <div class="acc-icon ai-blue">💻</div>
+          <div class="acc-info">
+            <div class="acc-title">Tin học Ứng dụng</div>
+            <div class="acc-sub">Dành cho học sinh lớp 2 – 9 · Từ cơ bản đến nâng cao</div>
+          </div>
+          <span class="acc-arrow">▼</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-content">
+            <div class="course-detail">
+              <div class="course-text">
+                <h3>🎯 Mục tiêu khóa học</h3>
+                <ul class="course-points">
+                  <li>Sử dụng thành thạo máy tính, bàn phím, chuột</li>
+                  <li>Soạn thảo văn bản với Microsoft Word</li>
+                  <li>Làm việc với bảng tính Excel cơ bản</li>
+                  <li>Tạo bài thuyết trình PowerPoint</li>
+                  <li>Sử dụng Internet an toàn và hiệu quả</li>
+                  <li>Thực hành qua bài tập thực tế gắn với chương trình học</li>
+                </ul>
+
+                <div class="course-levels">
+                  <div class="level-card lv1">
+                    <h4>🔵 Lớp 2–3 (Tin học 1, 2)</h4>
+                    <p>Làm quen máy tính, gõ 10 ngón, vẽ Paint, Word cơ bản</p>
+                  </div>
+                  <div class="level-card lv2">
+                    <h4>🟠 Lớp 4–5 (Tin học 3, 4/1, 4/2, 5)</h4>
+                    <p>Word nâng cao, Excel, PowerPoint, Internet an toàn</p>
+                  </div>
+                  <div class="level-card lv3">
+                    <h4>🟢 THCS (Tin học THCS 1, 2)</h4>
+                    <p>Ứng dụng văn phòng nâng cao, kỹ năng số, chuẩn bị thi</p>
+                  </div>
+                </div>
+
+                <div class="fee-bar">
+                  <span class="fee-label">Học phí/tháng:</span>
+                  <span class="fee-val">300k – 400k</span>
+                  <span class="fee-label">(tùy lớp)</span>
+                </div>
+              </div>
+
+              <div class="course-imgs">
+                <div class="course-img-box ph-blue">
+                  <img src="images/tinhoc1.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">💻</span>
+                  <span class="img-caption">Học sinh thực hành trên máy tính</span>
+                </div>
+                <div class="course-img-box ph-blue">
+                  <img src="images/tinhoc2.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">⌨️</span>
+                  <span class="img-caption">Luyện gõ 10 ngón bàn phím</span>
+                </div>
+                <div class="course-img-box ph-blue">
+                  <img src="images/tinhoc3.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">📄</span>
+                  <span class="img-caption">Soạn thảo văn bản Word</span>
+                </div>
+                <div class="course-img-box ph-blue">
+                  <img src="images/tinhoc4.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">📊</span>
+                  <span class="img-caption">Làm bài tập Excel, PowerPoint</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCORDION 2: PYTHON / SCRATCH -->
+      <div class="accordion" id="acc2">
+        <div class="acc-header" onclick="toggleAcc('acc2')">
+          <div class="acc-icon ai-orange">🐍</div>
+          <div class="acc-info">
+            <div class="acc-title">Lập trình Python / Scratch</div>
+            <div class="acc-sub">Dành cho học sinh đã biết dùng máy tính · Từ lập trình kéo thả đến code thật</div>
+          </div>
+          <span class="acc-arrow">▼</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-content">
+            <div class="course-detail">
+              <div class="course-text">
+                <h3>🎯 Mục tiêu khóa học</h3>
+                <ul class="course-points">
+                  <li>Hiểu tư duy lập trình: biến, vòng lặp, điều kiện</li>
+                  <li>Tạo game, hoạt hình với Scratch (cơ bản)</li>
+                  <li>Lập trình Python: tính toán, xử lý dữ liệu</li>
+                  <li>Giải các bài toán tin học thực tế</li>
+                  <li>Chuẩn bị thi Tin học trẻ bảng A (Python nâng cao)</li>
+                  <li>Chuẩn bị thi Tin học trẻ bảng B với Python/C++ (THCS)</li>
+                </ul>
+
+                <div class="course-levels">
+                  <div class="level-card lv1">
+                    <h4>🔵 Python/Scratch Cơ bản</h4>
+                    <p>Lập trình kéo thả Scratch, làm quen Python, tạo mini-game vui nhộn</p>
+                  </div>
+                  <div class="level-card lv2">
+                    <h4>🟠 Python Nâng cao</h4>
+                    <p>Thuật toán, cấu trúc dữ liệu, ôn thi Tin học trẻ bảng A</p>
+                  </div>
+                  <div class="level-card lv3">
+                    <h4>🟢 Python/C++ THCS</h4>
+                    <p>Lập trình thi đấu, thuật toán nâng cao, ôn thi bảng B</p>
+                  </div>
+                </div>
+
+                <div class="fee-bar">
+                  <span class="fee-label">Học phí/tháng:</span>
+                  <span class="fee-val">400k – 500k</span>
+                  <span class="fee-label">(tùy lớp)</span>
+                </div>
+              </div>
+
+              <div class="course-imgs">
+                <div class="course-img-box ph-orange">
+                  <img src="images/python1.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">🎮</span>
+                  <span class="img-caption">Tạo game với Scratch</span>
+                </div>
+                <div class="course-img-box ph-orange">
+                  <img src="images/python2.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">🐍</span>
+                  <span class="img-caption">Lập trình Python thực tế</span>
+                </div>
+                <div class="course-img-box ph-orange">
+                  <img src="images/python3.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">🏆</span>
+                  <span class="img-caption">Ôn thi Tin học trẻ</span>
+                </div>
+                <div class="course-img-box ph-orange">
+                  <img src="images/python4.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">💡</span>
+                  <span class="img-caption">Giải bài toán thuật toán</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCORDION 3: ROBOTICS -->
+      <div class="accordion" id="acc3">
+        <div class="acc-header" onclick="toggleAcc('acc3')">
+          <div class="acc-icon ai-teal">🤖</div>
+          <div class="acc-info">
+            <div class="acc-title">Robotics – Lập trình Robot</div>
+            <div class="acc-sub">Khai giảng 7/2026 · Số lượng có hạn 8–10 bé/lớp</div>
+          </div>
+          <span class="acc-arrow">▼</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-content">
+            <div class="course-detail">
+              <div class="course-text">
+                <h3>🎯 Mục tiêu khóa học</h3>
+                <ul class="course-points">
+                  <li>Lắp ráp robot từ các bộ phận cơ khí</li>
+                  <li>Hiểu nguyên lý động cơ, cảm biến, bánh răng</li>
+                  <li>Lập trình robot di chuyển, né vật cản, thực hiện nhiệm vụ</li>
+                  <li>Tư duy kỹ thuật, giải quyết vấn đề thực tế</li>
+                  <li>Làm việc nhóm, trình bày sản phẩm</li>
+                  <li>Nền tảng cho STEM, thi đấu Robotics</li>
+                </ul>
+
+                <div class="course-levels">
+                  <div class="level-card lv3">
+                    <h4>🟢 Điều kiện tham gia</h4>
+                    <p>Bé có kỹ năng lắp ráp mô hình, yêu thích công nghệ và robot</p>
+                  </div>
+                  <div class="level-card lv1">
+                    <h4>📅 Lịch học</h4>
+                    <p>Thứ 7 & Chủ Nhật: 7h30 – 9h15 · Khai giảng tháng 7/2026</p>
+                  </div>
+                </div>
+
+                <div class="fee-bar">
+                  <span class="fee-label">Học phí/tháng:</span>
+                  <span class="fee-val">500k</span>
+                  <span style="font-size:0.72rem;color:#e63946;font-weight:600;margin-left:8px;">⚡ Chỉ còn vài chỗ!</span>
+                </div>
+              </div>
+
+              <div class="course-imgs">
+                <div class="course-img-box ph-green">
+                  <img src="images/robot1.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">🔧</span>
+                  <span class="img-caption">Lắp ráp robot từ đầu</span>
+                </div>
+                <div class="course-img-box ph-green">
+                  <img src="images/robot2.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">⚙️</span>
+                  <span class="img-caption">Cơ khí, động cơ, cảm biến</span>
+                </div>
+                <div class="course-img-box ph-green">
+                  <img src="images/robot3.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">🤖</span>
+                  <span class="img-caption">Lập trình robot hoạt động</span>
+                </div>
+                <div class="course-img-box ph-green">
+                  <img src="images/robot4.jpg" alt="" onerror="this.style.display='none'">
+                  <span class="img-label">🏅</span>
+                  <span class="img-caption">Trình bày sản phẩm robot</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /course-grid -->
   </div>
 </div>
 
-<!-- ========== TABLE 1: TOÀN BỘ ========== -->
-<div class="section" id="table1">
-  <div class="section-header">
-    <div class="section-badge b2">📋</div>
-    <div class="section-title">
-      Khai giảng các lớp hè 2026 (Mới)
-      <span>Tổng hợp tất cả các lớp trong tuần</span>
+<!-- ════════════════════════════════════════
+     TAB 3: HÌNH ẢNH HOẠT ĐỘNG
+═════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-gallery">
+  <div class="panel-wrap">
+    <div class="panel-title">🖼️ Hình ảnh hoạt động</div>
+    <div class="panel-subtitle">Những khoảnh khắc học tập và vui chơi tại BitByBit Kid's</div>
+
+    <div class="gallery-intro">
+      📍 <strong>Lớp Tin học BitByBit Kid's</strong> – Thôn Phú Sơn 1, Xã Hòa Tiến, TP Đà Nẵng<br>
+      Trung tâm với không gian học tập thân thiện, trang thiết bị hiện đại, giáo viên tận tâm. Các bé vừa học vừa chơi, phát triển kỹ năng số từ sớm.
     </div>
-  </div>
-  <div class="table-wrap">
-    <table class="t2">
-      <thead>
-        <tr>
-          <th>Lớp / Thời gian</th>
-          <th>Thứ 2</th>
-          <th>Thứ 3</th>
-          <th>Thứ 4</th>
-          <th>Thứ 5</th>
-          <th>Thứ 6</th>
-          <th>Thứ 7</th>
-          <th>Chủ Nhật</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <span class="class-name">ROBOTIC (7/2026) 
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Có kỹ năng lắp ráp mô hình, muốn làm quen lập trình robot</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c4">7h30 – 9h15</span></td>
-          <td><span class="time-chip c4">7h30 – 9h15</span></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 1
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp lớp 2 và lớp 3</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c1">17h30 – 19h00</span></td>
-          <td></td>
-          <td><span class="time-chip c1">17h30 – 19h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 2
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp lớp 2 và lớp 3</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c1">9h30 – 11h00</span></td>
-          <td><span class="time-chip c1">9h30 – 11h00</span></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 3
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp lớp 4 và lớp 5</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c1">19h00 – 20h30</span></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c1">15h30 – 17h00</span></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">TH ứng dụng THCS 1
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp học sinh THCS</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c2">9h30 – 11h00</span></td>
-          <td></td>
-          <td><span class="time-chip c2">9h30 – 11h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-		<tr>
-          <td>
-            <span class="class-name">TH ứng dụng THCS 2
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp học sinh THCS</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c2">19h00 – 20h30</span></td>
-          <td></td>
-          <td><span class="time-chip c2">19h00 – 20h30</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Python/Scratch (Cơ bản)
-			    <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            <span class="class-desc">Đã biết dùng máy tính, muốn làm quen lập trình</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c3">17h30 – 19h00</span></td>
-          <td></td>
-          <td><span class="time-chip c3">15h30 – 17h00</span></td>
-        </tr>
-		<tr>
-          <td>
-            <span class="class-name">Python/C++ (THCS)
-				<span class="new-badge"><img src="images/new.png" alt="new"></span>
-            <span class="class-desc">Đã thành thạo python/scratch cơ bản, ôn thi tin học trẻ bảng B</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c4">19h00 - 20h30</span></td>
-          <td><span class="time-chip c4">19h00 - 20h30</span></td>
-        </tr>		
-      </tbody>
-    </table>
-  </div>
-  <div class="table-note">
-    📌 <strong>Tin học BitByBit Kid's</strong> –Chuyên Tin học ứng dụng · Python · Scratch · Robotics &nbsp;|&nbsp; 
-    📞 <strong>0934.929.377</strong> &nbsp;|&nbsp; 
-    📍 Phú Sơn 1, Xã Hòa Tiến, TP Đà Nẵng
-  </div>
-</div>
 
-<!-- ========== TABLE 2: LỚP TIN HỌC MỚI ========== -->
-<div class="divider"></div>
-<div class="section" id="table2" style = "display:none">
-  <div class="section-header">
-    <div class="section-badge b2">🆕</div>
-    <div class="section-title">
-      Lớp Tin học Mới (Hè 2026)
-      <span>Dự kiến khai giảng tháng 6/2026</span>
+    <!-- Nhóm 1 -->
+    <div class="gallery-section-title">💻 Tin học Ứng dụng</div>
+    <div class="photo-grid">
+      <div class="photo-card">
+        <div class="photo-placeholder ph-blue">
+          <img src="images/gallery/tinhoc_01.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">💻</span>
+          <span class="ph-num">Ảnh 01</span>
+        </div>
+        <div class="photo-caption">Các bé thực hành trên máy tính</div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder ph-blue">
+          <img src="images/gallery/tinhoc_02.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">⌨️</span>
+          <span class="ph-num">Ảnh 02</span>
+        </div>
+        <div class="photo-caption">Luyện gõ 10 ngón chuyên nghiệp</div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder ph-blue">
+          <img src="images/gallery/tinhoc_03.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">📝</span>
+          <span class="ph-num">Ảnh 03</span>
+        </div>
+        <div class="photo-caption">Làm bài tập Word, Excel</div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder ph-blue">
+          <img src="images/gallery/tinhoc_04.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">🎓</span>
+          <span class="ph-num">Ảnh 04</span>
+        </div>
+        <div class="photo-caption">Cô giáo hướng dẫn tận tình</div>
+      </div>
     </div>
-  </div>
-  <div class="table-wrap">
-    <table class="t2">
-      <thead>
-        <tr>
-          <th>Lớp / Thời gian</th>
-          <th>Thứ 2</th>
-          <th>Thứ 3</th>
-          <th>Thứ 4</th>
-          <th>Thứ 5</th>
-          <th>Thứ 6</th>
-          <th>Thứ 7</th>
-          <th>Chủ Nhật</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 1
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp lớp 2 và lớp 3</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c2">17h30 – 19h00</span></td>
-          <td></td>
-          <td><span class="time-chip c2">17h30 – 19h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 2
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp lớp 2 và lớp 3</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c2">9h30 – 11h00</span></td>
-          <td><span class="time-chip c2">9h30 – 11h00</span></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 3
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp lớp 4 và lớp 5</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c2">15h30 – 17h00</span></td>
-          <td><span class="time-chip c2">15h30 – 17h00</span></td>
-        </tr>
-        <!--Hoàn add-->
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng THCS
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp học sinh THCS</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c2">9h30 – 11h00</span></td>
-          <td></td>
-          <td><span class="time-chip c2">9h30 – 11h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-		<tr>
-		<td>
-            <span class="class-name">Tin học ứng dụng THCS 2
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp học sinh THCS</span>
-          </td>
-          <td><span class="time-chip c2">9h30 – 11h00</span></td>
-          <td></td>
-          <td><span class="time-chip c2">9h30 – 11h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-		</tr>
-        <tr>
-          <td>
-            <span class="class-name">ROBOTIC (7/2026)
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Có kỹ năng lắp ráp mô hình, muốn làm quen lập trình robot</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c2">7h30 – 9h15</span></td>
-          <td><span class="time-chip c2">7h30 – 9h15</span></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Python/Scratch (Cơ bản)
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Đã biết dùng máy tính, muốn làm quen lập trình</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c2">15h30 – 17h00</span></td>
-          <td></td>
-          <td><span class="time-chip c2">15h30 – 17h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Python (Nâng cao)
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Đã thành thạo python/scratch cơ bản, ôn thi tin học trẻ bảng A</span>
-          </td>
-          <td><span class="time-chip c2">18h00 – 19h30</span></td>
-          <td></td>
-          <td><span class="time-chip c2">18h00 – 19h30</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Python/C++ (THCS)
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Đã thành thạo python/scratch cơ bản, ôn thi tin học trẻ bảng B</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c2">17h30 – 19h00</span></td>
-          <td><span class="time-chip c2">17h30 – 19h00</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="table-note">
-    📌 <strong>Tin học BitByBit Kid's</strong> –Chuyên Tin học ứng dụng · Python · Scratch · Robotics &nbsp;|&nbsp; 
-    📞 <strong>0934.929.377</strong> &nbsp;|&nbsp; 
-    📍 Phú Sơn 1, Xã Hòa Tiến, TP Đà Nẵng
-  </div>
-</div>
 
-<!-- ========== TABLE 3: TIN HỌC ỨNG DỤNG ========== -->
-<div class="divider"></div>
-<div class="section" id="table3" style = "display:none">
-  <div class="section-header">
-    <div class="section-badge b3">💻</div>
-    <div class="section-title">
-      Tin học Ứng dụng & THCS
-      <span>Các lớp 4,5 đang theo học tại Bitbybit và các bạn THCS</span>
+    <!-- Nhóm 2 -->
+    <div class="gallery-section-title">🐍 Lập trình Python / Scratch</div>
+    <div class="photo-grid">
+      <div class="photo-card">
+        <div class="photo-placeholder ph-orange">
+          <img src="images/gallery/python_01.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">🎮</span>
+          <span class="ph-num">Ảnh 01</span>
+        </div>
+        <div class="photo-caption">Tạo game với Scratch</div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder ph-orange">
+          <img src="images/gallery/python_02.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">🐍</span>
+          <span class="ph-num">Ảnh 02</span>
+        </div>
+        <div class="photo-caption">Code Python trên màn hình lớn</div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder ph-orange">
+          <img src="images/gallery/python_03.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">🏆</span>
+          <span class="ph-num">Ảnh 03</span>
+        </div>
+        <div class="photo-caption">Bé đạt giải Tin học trẻ</div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder ph-orange">
+          <img src="images/gallery/python_04.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">💡</span>
+          <span class="ph-num">Ảnh 04</span>
+        </div>
+        <div class="photo-caption">Giải bài toán thuật toán nhóm</div>
+      </div>
     </div>
-  </div>
-  <div class="table-wrap">
-    <table class="t3">
-      <thead>
-        <tr>
-          <th>Lớp / Thời gian</th>
-          <th>Thứ 2</th>
-          <th>Thứ 3</th>
-          <th>Thứ 4</th>
-          <th>Thứ 5</th>
-          <th>Thứ 6</th>
-          <th>Thứ 7</th>
-          <th>Chủ Nhật</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 4/1</span>
-            <span class="class-desc">Lớp 3 lên 4, đang học K3/1 của Bitbybit</span>
-          </td>
-          <td><span class="time-chip c3">8h00 – 9h30</span></td>
-          <td></td>
-          <td><span class="time-chip c3">8h00 – 9h30</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 4/2</span>
-            <span class="class-desc">Lớp 3 lên 4, đang học K3/3 của Bitbybit</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c3">7h45 – 9h15</span></td>
-          <td></td>
-          <td><span class="time-chip c3">7h45 – 9h15</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng 5</span>
-            <span class="class-desc">Lớp 4 lên 5, đang học K45/1, K45/3 của Bitbybit</span>
-          </td>
-          <td><span class="time-chip c3">15h30 – 17h00</span></td>
-          <td></td>
-          <td><span class="time-chip c3">15h30 – 17h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Tin học ứng dụng THCS
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Phù hợp học sinh THCS</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c3">9h30 – 11h00</span></td>
-          <td></td>
-          <td><span class="time-chip c3">9h30 – 11h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="table-note">
-    📌 <strong>Tin học BitByBit Kid's</strong> –Chuyên Tin học ứng dụng · Python · Scratch · Robotics &nbsp;|&nbsp; 
-    📞 <strong>0934.929.377</strong> &nbsp;|&nbsp; 
-    📍 Phú Sơn 1, Xã Hòa Tiến, TP Đà Nẵng
-  </div>
-</div>
 
-<!-- ========== TABLE 4: PYTHON & ROBOTIC ========== -->
-<div class="divider"></div>
-<div class="section" id="table4" style = "display:none">
-  <div class="section-header">
-    <div class="section-badge b4">🤖</div>
-    <div class="section-title">
-      Python / Scratch & Robotic
-      <span>Lập trình và robot – từ cơ bản đến nâng cao</span>
+    <!-- Nhóm 3 -->
+    <div class="gallery-section-title">🤖 Robotics</div>
+    <div class="photo-grid">
+      <div class="photo-card">
+        <div class="photo-placeholder ph-green">
+          <img src="images/gallery/robot_01.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">🔧</span>
+          <span class="ph-num">Ảnh 01</span>
+        </div>
+        <div class="photo-caption">Lắp ráp robot từng bước</div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder ph-green">
+          <img src="images/gallery/robot_02.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">⚙️</span>
+          <span class="ph-num">Ảnh 02</span>
+        </div>
+        <div class="photo-caption">Kiểm tra động cơ và cảm biến</div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder ph-green">
+          <img src="images/gallery/robot_03.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">🤖</span>
+          <span class="ph-num">Ảnh 03</span>
+        </div>
+        <div class="photo-caption">Robot chạy thử thành công!</div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder ph-green">
+          <img src="images/gallery/robot_04.jpg" alt="" onerror="this.style.display='none'">
+          <span class="ph-icon">🏅</span>
+          <span class="ph-num">Ảnh 04</span>
+        </div>
+        <div class="photo-caption">Trình bày sản phẩm robot</div>
+      </div>
     </div>
-  </div>
-  <div class="table-wrap">
-    <table class="t4">
-      <thead>
-        <tr>
-          <th>Lớp / Thời gian</th>
-          <th>Thứ 2</th>
-          <th>Thứ 3</th>
-          <th>Thứ 4</th>
-          <th>Thứ 5</th>
-          <th>Thứ 6</th>
-          <th>Thứ 7</th>
-          <th>Chủ Nhật</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <span class="class-name">ROBOTIC (7/2026)
-              <span class="new-badge"><img src="images/new.png" alt="new"></span>
-            </span>
-            <span class="class-desc">Có kỹ năng lắp ráp mô hình, muốn làm quen lập trình robot</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c4">9h30 – 11h30</span></td>
-          <td><span class="time-chip c4">9h30 – 11h30</span></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Python/Scratch (Cơ bản)</span>
-            <span class="class-desc">Đã biết dùng máy tính, muốn làm quen lập trình</span>
-          </td>
-          <td></td>
-          <td><span class="time-chip c4">15h30 – 17h00</span></td>
-          <td></td>
-          <td><span class="time-chip c4">15h30 – 17h00</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Python (Nâng cao)</span>
-            <span class="class-desc">Đã thành thạo python/scratch cơ bản, ôn thi tin học trẻ bảng A</span>
-          </td>
-          <td><span class="time-chip c4">18h00 – 19h30</span></td>
-          <td></td>
-          <td><span class="time-chip c4">18h00 – 19h30</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <span class="class-name">Python/C++ (THCS)</span>
-            <span class="class-desc">Đã thành thạo python/scratch cơ bản, ôn thi tin học trẻ bảng B</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><span class="time-chip c4">17h30 – 19h00</span></td>
-          <td><span class="time-chip c4">17h30 – 19h00</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="table-note">
-    📌 <strong>Tin học BitByBit Kid's</strong> –Chuyên Tin học ứng dụng · Python · Scratch · Robotics &nbsp;|&nbsp; 
-    📞 <strong>0934.929.377</strong> &nbsp;|&nbsp; 
-    📍 Phú Sơn 1, Xã Hòa Tiến, TP Đà Nẵng
+
+    <!-- Upload hint -->
+    <div class="upload-hint">
+      📁 <strong>Hướng dẫn thêm ảnh thật:</strong> Tạo thư mục <code>images/gallery/</code> trong cùng thư mục với file HTML.<br>
+      Đặt ảnh theo tên: <code>tinhoc_01.jpg</code>, <code>python_01.jpg</code>, <code>robot_01.jpg</code> … là ảnh tự động hiển thị.
+    </div>
+
   </div>
 </div>
 
+<!-- FOOTER -->
 <footer>
-  <strong>LỚP TIN HỌC BITBYBIT KID'S - 0934.929.377</strong> 
-  <br>Thôn Phú Sơn 1, Xã Hòa Tiến, TP Đà Nẵng · © 2026
+  <strong>LỚP TIN HỌC BITBYBIT KID'S</strong> &nbsp;·&nbsp; 📞 0934.929.377 (cô Tiên) &nbsp;·&nbsp; 📍 Phú Sơn 1, Xã Hòa Tiến, TP Đà Nẵng<br>
+  <span style="font-size:0.72rem;">© 2026 – Tất cả các quyền được bảo lưu</span>
 </footer>
 
+<script>
+  // Tab switching
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // Accordion
+  function toggleAcc(id) {
+    const el = document.getElementById(id);
+    const isOpen = el.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.accordion').forEach(a => a.classList.remove('open'));
+    // Open clicked if it was closed
+    if (!isOpen) el.classList.add('open');
+  }
+</script>
 </body>
 </html>
