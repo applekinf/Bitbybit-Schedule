@@ -66,7 +66,7 @@ nav a.on{color:var(--acc)}
 <script>
 // ===== CẤU HÌNH: chỉ cần sửa dòng API_URL, và tên cột nếu bạn đổi tên trong Sheet =====
 const API_URL = 'https://script.google.com/macros/s/AKfycbxcKH7POu-4CF_EXpBAVwqOsdfhw9CLcSVdeWPWgLiRrcJWr2539Ms_HBNaBX0EeLouxA/exec';
-const COL = {course:'Khóa học', name:'Họ Tên', prev:'Thiếu tháng trước', total:'Tổng học phí', status:'Trạng thái', note:'Ghi chú'};
+const COL = {course:'Khóa học', name:'Họ Tên', prev:'Thiếu tháng trước', total:'Tổng học phí', status:'Trạng thái', note:'Ghi chú', paidAt:'Ngày nộp', by:'Người thu'}; // tự cập nhật theo Sheet
 const HIDE = ['Mã HS','Ngày nộp','Người thu']; // cột có trong Sheet nhưng không hiện trên thẻ
 const PAID = 'Đã nộp', UNPAID = 'Chưa nộp';
 // =========================================================================================
@@ -99,7 +99,8 @@ async function start(){
 async function load(){
   $('#view').innerHTML='<div class="empty">Đang tải dữ liệu…</div>';
   const r = await api({action:'data',tab:S.tab});
-  if(!r.ok){toast(r.error);return}
+  if(!r.ok){toast(r.error,9000);return}
+  Object.assign(COL,r.cols||{});HIDE.push(COL.paidAt,COL.by);
   S.rows=r.rows;S.headers=r.headers;S.info=r.info||{};render();
 }
 
@@ -109,7 +110,7 @@ function card(r){
     .map(h=>`<div class="kv">${esc(h)}: ${esc(r[h])}</div>`).join('');
   const p = paid(r);
   return `<div class="card"><div class="top"><b>${esc(r[COL.name])}</b><span class="tag ${p?'ok':'no'}">${p?PAID:UNPAID}</span></div>
-  <div class="sub">${esc(r[COL.course])}</div>${infoBox(r[COL.course])}<div class="amt">${vnd(r[COL.total])}</div>
+  <div class="sub">${esc(r[COL.course])}</div><div class="amt">${vnd(r[COL.total])}</div>
   ${Number(r[COL.prev])>0?`<div class="kv">Trong đó thiếu tháng trước: ${vnd(r[COL.prev])}</div>`:''}${extra}
   ${r[COL.note]?`<div class="note">${esc(r[COL.note])}</div>`:''}
   <button class="${p?'undo':''}" data-act="${r._row}">${p?'Hủy xác nhận':'Xác nhận đã thu'}</button></div>`;
@@ -140,14 +141,23 @@ function render(){
       <div class="card"><div class="kv">Tổng phải thu</div><div class="amt">${vnd(T.tot)}</div></div>
       <div class="card"><div class="kv">Học sinh đã nộp</div><div class="amt">${T.np}/${T.n}</div></div></div>
       <div class="card"><b>Tỷ lệ thu: ${pc(T.got,T.tot)}%</b><div class="bar"><i style="width:${pc(T.got,T.tot)}%"></i></div></div>`+
-      Object.entries(all).sort().map(([k,o])=>`<div class="card" data-cls="${esc(k)}"><div class="top"><b>${esc(k)}</b><span class="sub">${o.np}/${o.n} HS</span></div>${infoBox(k)}
-        <div class="bar"><i style="width:${pc(o.got,o.tot)}%"></i></div><div class="kv">Thu ${vnd(o.got)} / ${vnd(o.tot)}. Còn thiếu ${vnd(o.tot-o.got)}</div></div>`).join('');
+      Object.entries(all).sort().map(([k,o])=>`<div class="card" data-cls="${esc(k)}"><div class="top"><b>${esc(k)}</b><span class="sub">${o.np}/${o.n} HS</span></div>
+        <div class="bar"><i style="width:${pc(o.got,o.tot)}%"></i></div><div class="kv">Thu ${vnd(o.got)} / ${vnd(o.tot)}. Còn thiếu ${vnd(o.tot-o.got)}</div><div class="kv" style="color:var(--acc);margin-top:6px">Xem ai đã nộp, ai chưa nộp ›</div></div>`).join('');
+  }else if(S.v==='class'){
+    const L=S.rows.filter(r=>r[COL.course]===S.cls),no=L.filter(r=>!paid(r)),ok=L.filter(paid);
+    const sum=a=>a.reduce((t,r)=>t+(Number(r[COL.total])||0),0);
+    const li=a=>a.map(r=>`<div class="top" style="padding:10px 0;border-top:1px solid var(--line)"><span>${esc(r[COL.name])}${r[COL.note]?`<div class="kv">${esc(r[COL.note])}</div>`:''}</span><b>${vnd(r[COL.total])}</b></div>`).join('')||'<div class="kv">Không có</div>';
+    v.innerHTML=`<button class="ghost" id="bk" style="margin:0 0 12px">‹ Về tổng quan</button>
+      <div class="card"><b style="font-size:19px">${esc(S.cls)}</b>${infoBox(S.cls)}</div>
+      <div class="card"><div class="top" style="margin-bottom:6px"><b style="color:var(--warn)">Chưa nộp (${no.length})</b><b>${vnd(sum(no))}</b></div>${li(no)}</div>
+      <div class="card"><div class="top" style="margin-bottom:6px"><b style="color:var(--ok)">Đã nộp (${ok.length})</b><b>${vnd(sum(ok))}</b></div>${li(ok)}</div>`;
+    $('#bk').onclick=()=>{S.v='dash';render();scrollTo(0,0)};
   }else{
     const cls=Object.keys(stats(S.rows)).sort();
     const list=S.rows.filter(r=>!paid(r)&&(!S.cls||r[COL.course]===S.cls));
     const sum=list.reduce((a,r)=>a+(Number(r[COL.total])||0),0);
     v.innerHTML=`<select id="cls" style="margin-bottom:12px"><option value="">Tất cả các lớp</option>${cls.map(c=>`<option ${c===S.cls?'selected':''}>${esc(c)}</option>`).join('')}</select>
-      <div class="card"><b>${list.length} học sinh chưa nộp</b>${S.cls?infoBox(S.cls):''}<div class="amt">${vnd(sum)}</div>
+      <div class="card"><b>${list.length} học sinh chưa nộp</b><div class="amt">${vnd(sum)}</div>
       <div class="row2"><button class="ghost" id="cp">Sao chép danh sách</button><button class="ghost" id="csv">Tải CSV</button></div></div>`+
       list.map(r=>`<div class="card"><div class="top"><b>${esc(r[COL.name])}</b><b>${vnd(r[COL.total])}</b></div><div class="sub">${esc(r[COL.course])}</div>${r[COL.note]?`<div class="note">${esc(r[COL.note])}</div>`:''}</div>`).join('');
     $('#cls').onchange=e=>{S.cls=e.target.value;render()};
@@ -183,7 +193,7 @@ $('#tab').onchange=e=>{S.tab=e.target.value;load()};
 document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>{S.v=a.dataset.v;document.querySelectorAll('nav a').forEach(x=>x.classList.toggle('on',x===a));render();scrollTo(0,0)});
 $('#view').onclick=e=>{
   const b=e.target.closest('[data-act]');if(b)return ask(b.dataset.act);
-  const c=e.target.closest('[data-cls]');if(c){S.cls=c.dataset.cls;document.querySelector('[data-v=report]').click()}
+  const c=e.target.closest('[data-cls]');if(c){S.cls=c.dataset.cls;S.v='class';render();scrollTo(0,0)}
 };
 start();
 </script>
