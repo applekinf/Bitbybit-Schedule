@@ -41,6 +41,11 @@ nav a.on{color:var(--acc)}
 #sheet h2{margin:0 0 6px;font-size:20px}
 #toast{position:fixed;left:16px;right:16px;top:calc(env(safe-area-inset-top) + 8px);background:var(--ink);color:#fff;padding:12px 14px;border-radius:12px;z-index:20;display:none}
 .info{margin-top:6px;font-size:14px;background:#E8EEFB;border-radius:8px;padding:6px 10px}
+.nm{font-size:20px;font-weight:700;line-height:1.25}
+.chip{display:inline-block;margin:6px 0 10px;font-size:14px;font-weight:600;color:var(--acc);background:#E8EEFB;border-radius:8px;padding:3px 10px}
+.pay{background:#F5F7FB;border-left:5px solid var(--warn);border-radius:10px;padding:10px 14px}
+.pay.ok{border-left-color:var(--ok)}
+.pay .amt{margin:2px 0}
 .empty{text-align:center;color:var(--mute);padding:30px 10px}
 #gate{padding:calc(env(safe-area-inset-top) + 80px) 24px}
 </style>
@@ -65,7 +70,7 @@ nav a.on{color:var(--acc)}
 
 <script>
 // ===== CẤU HÌNH: chỉ cần sửa dòng API_URL, và tên cột nếu bạn đổi tên trong Sheet =====
-const API_URL = 'https://script.google.com/macros/s/AKfycbxcKH7POu-4CF_EXpBAVwqOsdfhw9CLcSVdeWPWgLiRrcJWr2539Ms_HBNaBX0EeLouxA/exec';
+const API_URL = 'DÁN_URL_APPS_SCRIPT_VÀO_ĐÂY';
 const COL = {course:'Khóa học', name:'Họ Tên', prev:'Thiếu tháng trước', total:'Tổng học phí', status:'Trạng thái', note:'Ghi chú', paidAt:'Ngày nộp', by:'Người thu'}; // tự cập nhật theo Sheet
 const HIDE = ['Mã HS','Ngày nộp','Người thu']; // cột có trong Sheet nhưng không hiện trên thẻ
 const PAID = 'Đã nộp', UNPAID = 'Chưa nộp';
@@ -104,14 +109,16 @@ async function load(){
   S.rows=r.rows;S.headers=r.headers;S.info=r.info||{};render();
 }
 
+const nameOf=r=>{if(r[COL.name])return r[COL.name];const h=S.headers.find(h=>![COL.course,COL.prev,COL.total,COL.status,COL.note,...HIDE].includes(h)&&r[h]&&isNaN(r[h]));return h?r[h]:'(không có tên)'};
 const infoBox=c=>{const a=(S.info[c]||[]).filter(Boolean);return a.length?`<div class="info">${a.map(esc).join('<br>')}</div>`:''};
 function card(r){
   const extra = S.headers.filter(h=>![COL.course,COL.name,COL.prev,COL.total,COL.status,COL.note,...HIDE].includes(h)&&r[h]!=='')
     .map(h=>`<div class="kv">${esc(h)}: ${esc(r[h])}</div>`).join('');
   const p = paid(r);
-  return `<div class="card"><div class="top"><b>${esc(r[COL.name])}</b><span class="tag ${p?'ok':'no'}">${p?PAID:UNPAID}</span></div>
-  <div class="sub">${esc(r[COL.course])}</div><div class="amt">${vnd(r[COL.total])}</div>
-  ${Number(r[COL.prev])>0?`<div class="kv">Trong đó thiếu tháng trước: ${vnd(r[COL.prev])}</div>`:''}${extra}
+  return `<div class="card"><div class="top"><div class="nm">${esc(nameOf(r))}</div><span class="tag ${p?'ok':'no'}">${p?PAID:UNPAID}</span></div>
+  <div class="chip">${esc(r[COL.course])}</div>
+  <div class="pay ${p?'ok':'no'}"><div class="kv">Tổng học phí</div><div class="amt">${vnd(r[COL.total])}</div>
+  ${Number(r[COL.prev])>0?`<div class="kv">Gồm thiếu tháng trước ${vnd(r[COL.prev])}</div>`:''}</div>${extra}
   ${r[COL.note]?`<div class="note">${esc(r[COL.note])}</div>`:''}
   <button class="${p?'undo':''}" data-act="${r._row}">${p?'Hủy xác nhận':'Xác nhận đã thu'}</button></div>`;
 }
@@ -127,10 +134,11 @@ function render(){
   const v=$('#view');
   if(S.v==='collect'){
     const q=norm(S.q);
-    const list=S.rows.filter(r=>!q||norm(r[COL.name]).includes(q)||norm(r[COL.course]).includes(q))
+    const list=S.rows.filter(r=>{if(!q)return true;const t=norm(S.headers.map(h=>r[h]).join(' '));return q.split(' ').filter(Boolean).every(w=>t.includes(w))})
       .sort((a,b)=>paid(a)-paid(b)).slice(0,60);
     v.innerHTML=`<input id="q" type="search" placeholder="Gõ tên học sinh hoặc khóa học" value="${esc(S.q)}" style="margin-bottom:12px">`+
-      (list.map(card).join('')||'<div class="empty">Không tìm thấy học sinh phù hợp.</div>');
+      (list.map(card).join('')||'<div class="empty">Không tìm thấy học sinh phù hợp.</div>')+'<button class="ghost" id="dg">Kiểm tra dữ liệu</button><pre id="dgo" style="display:none;white-space:pre-wrap;font-size:12px"></pre>';
+    $('#dg').onclick=()=>{const o=$('#dgo');o.textContent=JSON.stringify({cot_nhan_duoc:COL,tieu_de_trong_sheet:S.headers,so_hoc_sinh:S.rows.length,thong_tin_lop:S.info,dong_dau:S.rows.slice(0,3)},null,1);o.style.display='block'};
     const i=$('#q');i.oninput=()=>{S.q=i.value;const pos=i.selectionStart;render();const j=$('#q');j.focus();j.setSelectionRange(pos,pos)};
   }else if(S.v==='dash'){
     const all=stats(S.rows),T=Object.values(all).reduce((a,o)=>({n:a.n+o.n,np:a.np+o.np,tot:a.tot+o.tot,got:a.got+o.got}),{n:0,np:0,tot:0,got:0});
@@ -146,7 +154,7 @@ function render(){
   }else if(S.v==='class'){
     const L=S.rows.filter(r=>r[COL.course]===S.cls),no=L.filter(r=>!paid(r)),ok=L.filter(paid);
     const sum=a=>a.reduce((t,r)=>t+(Number(r[COL.total])||0),0);
-    const li=a=>a.map(r=>`<div class="top" style="padding:10px 0;border-top:1px solid var(--line)"><span>${esc(r[COL.name])}${r[COL.note]?`<div class="kv">${esc(r[COL.note])}</div>`:''}</span><b>${vnd(r[COL.total])}</b></div>`).join('')||'<div class="kv">Không có</div>';
+    const li=a=>a.map(r=>`<div class="top" style="padding:10px 0;border-top:1px solid var(--line)"><span>${esc(nameOf(r))}${r[COL.note]?`<div class="kv">${esc(r[COL.note])}</div>`:''}</span><b>${vnd(r[COL.total])}</b></div>`).join('')||'<div class="kv">Không có</div>';
     v.innerHTML=`<button class="ghost" id="bk" style="margin:0 0 12px">‹ Về tổng quan</button>
       <div class="card"><b style="font-size:19px">${esc(S.cls)}</b>${infoBox(S.cls)}</div>
       <div class="card"><div class="top" style="margin-bottom:6px"><b style="color:var(--warn)">Chưa nộp (${no.length})</b><b>${vnd(sum(no))}</b></div>${li(no)}</div>
@@ -159,9 +167,9 @@ function render(){
     v.innerHTML=`<select id="cls" style="margin-bottom:12px"><option value="">Tất cả các lớp</option>${cls.map(c=>`<option ${c===S.cls?'selected':''}>${esc(c)}</option>`).join('')}</select>
       <div class="card"><b>${list.length} học sinh chưa nộp</b><div class="amt">${vnd(sum)}</div>
       <div class="row2"><button class="ghost" id="cp">Sao chép danh sách</button><button class="ghost" id="csv">Tải CSV</button></div></div>`+
-      list.map(r=>`<div class="card"><div class="top"><b>${esc(r[COL.name])}</b><b>${vnd(r[COL.total])}</b></div><div class="sub">${esc(r[COL.course])}</div>${r[COL.note]?`<div class="note">${esc(r[COL.note])}</div>`:''}</div>`).join('');
+      list.map(r=>`<div class="card"><div class="top"><b>${esc(nameOf(r))}</b><b>${vnd(r[COL.total])}</b></div><div class="sub">${esc(r[COL.course])}</div>${r[COL.note]?`<div class="note">${esc(r[COL.note])}</div>`:''}</div>`).join('');
     $('#cls').onchange=e=>{S.cls=e.target.value;render()};
-    $('#cp').onclick=()=>{navigator.clipboard.writeText(list.map(r=>`${r[COL.course]} - ${r[COL.name]}: ${vnd(r[COL.total])}`).join('\n')).then(()=>toast('Đã sao chép'))};
+    $('#cp').onclick=()=>{navigator.clipboard.writeText(list.map(r=>`${r[COL.course]} - ${nameOf(r)}: ${vnd(r[COL.total])}`).join('\n')).then(()=>toast('Đã sao chép'))};
     $('#csv').onclick=()=>{const h=S.headers,q=x=>`"${String(x==null?'':x).replace(/"/g,'""')}"`;
       const t='\uFEFF'+[h.map(q).join(',')].concat(list.map(r=>h.map(k=>q(r[k])).join(','))).join('\n');
       const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=`chua-nop-${S.tab}.csv`;a.click()};
@@ -171,7 +179,7 @@ function render(){
 function ask(row){
   const r=S.rows.find(x=>x._row==row),p=paid(r);
   $('#sheet').innerHTML=`<h2>${p?'Hủy xác nhận đã nộp?':'Xác nhận đã thu học phí?'}</h2>
-    <div class="sub">${esc(r[COL.name])} - ${esc(r[COL.course])}</div><div class="amt">${vnd(r[COL.total])}</div>
+    <div class="sub">${esc(nameOf(r))} - ${esc(r[COL.course])}</div><div class="amt">${vnd(r[COL.total])}</div>
     <div class="kv">${p?'Trạng thái sẽ đổi về "Chưa nộp" trên Google Sheet.':'Trạng thái sẽ đổi thành "Đã nộp" trên Google Sheet.'}</div>
     <button id="yes" class="${p?'undo':''}">${p?'Hủy xác nhận':'Xác nhận'}</button><button class="ghost" id="no">Đóng</button>`;
   $('#modal').classList.add('show');
@@ -181,7 +189,7 @@ function ask(row){
     const old=r[COL.status],nw=p?UNPAID:PAID;
     r[COL.status]=nw;render();toast('Đang lưu…',1500);
     try{
-      const res=await api(null,{tab:S.tab,row:r._row,name:r[COL.name],status:nw,user:S.who});
+      const res=await api(null,{tab:S.tab,row:r._row,name:nameOf(r),status:nw,user:S.who});
       if(!res.ok)throw new Error(res.error);
       toast(p?'Đã hủy xác nhận':'Đã ghi nhận "Đã nộp"');
     }catch(e){r[COL.status]=old;render();toast('Lưu thất bại: '+e.message,5000)}
