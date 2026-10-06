@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Học phí">
+<meta name="theme-color" content="#14213D">
+<title>Thu học phí</title>
+<style>
+:root{--ink:#14213D;--bg:#F2F4F7;--card:#fff;--ok:#0E8F6B;--warn:#D9480F;--line:#E2E6EC;--mute:#6B7487;--acc:#2B4C9B}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,"SF Pro Text",system-ui,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--ink);color:#fff;padding:calc(env(safe-area-inset-top) + 10px) 16px 12px}
+header h1{font-size:20px;margin:0 0 8px;font-weight:700}
+select,input{width:100%;font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+main{padding:14px 14px calc(92px + env(safe-area-inset-bottom))}
+.card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px;border:1px solid var(--line)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.top b{font-size:18px}
+.tag{font-size:13px;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.tag.ok{background:#DDF3EA;color:var(--ok)}.tag.no{background:#FDE7DC;color:var(--warn)}
+.sub{color:var(--mute);font-size:15px}
+.amt{font-size:26px;font-weight:700;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.kv{font-size:14px;color:var(--mute)}
+.note{margin-top:6px;font-size:14px;background:#FFF6D6;border-radius:8px;padding:6px 10px}
+button{font:inherit;font-weight:600;border:0;border-radius:12px;padding:13px 16px;background:var(--acc);color:#fff;width:100%;margin-top:10px}
+button.undo{background:#fff;color:var(--warn);border:1.5px solid var(--warn)}
+button.ghost{background:#E8ECF4;color:var(--ink)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav a{flex:1;text-align:center;padding:12px 0;font-size:14px;color:var(--mute);font-weight:600}
+nav a.on{color:var(--acc)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.grid .card{margin:0}.grid .amt{font-size:21px}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:8px 0 4px}
+.bar i{display:block;height:100%;background:var(--ok)}
+.row2{display:flex;gap:10px}.row2 button{margin-top:10px}
+#modal{position:fixed;inset:0;background:rgba(10,15,30,.5);display:none;align-items:flex-end;z-index:10}
+#modal.show{display:flex}
+#sheet{background:#fff;width:100%;border-radius:22px 22px 0 0;padding:20px 18px calc(18px + env(safe-area-inset-bottom))}
+#sheet h2{margin:0 0 6px;font-size:20px}
+#toast{position:fixed;left:16px;right:16px;top:calc(env(safe-area-inset-top) + 8px);background:var(--ink);color:#fff;padding:12px 14px;border-radius:12px;z-index:20;display:none}
+.info{margin-top:6px;font-size:14px;background:#E8EEFB;border-radius:8px;padding:6px 10px}
+.empty{text-align:center;color:var(--mute);padding:30px 10px}
+#gate{padding:calc(env(safe-area-inset-top) + 80px) 24px}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+<div id="gate" hidden>
+  <h1>Thu học phí</h1>
+  <p class="sub">Nhập mã PIN để tiếp tục.</p>
+  <input id="pin" type="password" inputmode="numeric" placeholder="Mã PIN">
+  <input id="who" placeholder="Tên người thu (ví dụ: Cô Lan)" style="margin-top:10px">
+  <button id="login">Vào</button>
+</div>
+<div id="app" hidden>
+  <header><h1>Thu học phí</h1><select id="tab"></select></header>
+  <main id="view"></main>
+  <nav>
+    <a data-v="collect" class="on">Thu tiền</a><a data-v="dash">Tổng quan</a><a data-v="report">Báo cáo</a>
+  </nav>
+</div>
+<div id="modal"><div id="sheet"></div></div>
+
+<script>
+// ===== CẤU HÌNH: chỉ cần sửa dòng API_URL, và tên cột nếu bạn đổi tên trong Sheet =====
+const API_URL = 'https://script.google.com/macros/s/AKfycbxcKH7POu-4CF_EXpBAVwqOsdfhw9CLcSVdeWPWgLiRrcJWr2539Ms_HBNaBX0EeLouxA/exec';
+const COL = {course:'Khóa học', name:'Họ Tên', prev:'Thiếu tháng trước', total:'Tổng học phí', status:'Trạng thái', note:'Ghi chú'};
+const HIDE = ['Mã HS','Ngày nộp','Người thu']; // cột có trong Sheet nhưng không hiện trên thẻ
+const PAID = 'Đã nộp', UNPAID = 'Chưa nộp';
+// =========================================================================================
+const S = {pin: localStorage.pin||'', who: localStorage.who||'', tab:'', rows:[], info:{}, headers:[], v:'collect', q:'', cls:''};
+const $ = s => document.querySelector(s);
+const vnd = n => (Number(n)||0).toLocaleString('vi-VN') + 'đ';
+const norm = s => String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const paid = r => String(r[COL.status]||'').trim() === PAID;
+const toast = (m,ms=3000) => {const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',ms)};
+
+async function api(params, body){
+  const r = body
+    ? await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({...body,pin:S.pin})})
+    : await fetch(API_URL+'?'+new URLSearchParams({...params,pin:S.pin}));
+  return r.json();
+}
+
+async function start(){
+  if(!S.pin){$('#gate').hidden=false;return}
+  $('#view').innerHTML='<div class="empty">Đang tải…</div>';$('#app').hidden=false;$('#gate').hidden=true;
+  try{
+    const r = await api({action:'tabs'});
+    if(!r.ok){ if(r.error==='PIN sai'){localStorage.removeItem('pin');S.pin='';$('#app').hidden=true;$('#gate').hidden=false;toast('PIN không đúng')} else toast(r.error); return }
+    $('#tab').innerHTML = r.tabs.map(t=>`<option>${esc(t)}</option>`).join('');
+    S.tab = r.tabs[r.tabs.length-1]; $('#tab').value = S.tab;
+    await load();
+  }catch(e){toast('Không kết nối được. Kiểm tra mạng và API_URL.')}
+}
+async function load(){
+  $('#view').innerHTML='<div class="empty">Đang tải dữ liệu…</div>';
+  const r = await api({action:'data',tab:S.tab});
+  if(!r.ok){toast(r.error);return}
+  S.rows=r.rows;S.headers=r.headers;S.info=r.info||{};render();
+}
+
+const infoBox=c=>{const a=(S.info[c]||[]).filter(Boolean);return a.length?`<div class="info">${a.map(esc).join('<br>')}</div>`:''};
+function card(r){
+  const extra = S.headers.filter(h=>![COL.course,COL.name,COL.prev,COL.total,COL.status,COL.note,...HIDE].includes(h)&&r[h]!=='')
+    .map(h=>`<div class="kv">${esc(h)}: ${esc(r[h])}</div>`).join('');
+  const p = paid(r);
+  return `<div class="card"><div class="top"><b>${esc(r[COL.name])}</b><span class="tag ${p?'ok':'no'}">${p?PAID:UNPAID}</span></div>
+  <div class="sub">${esc(r[COL.course])}</div>${infoBox(r[COL.course])}<div class="amt">${vnd(r[COL.total])}</div>
+  ${Number(r[COL.prev])>0?`<div class="kv">Trong đó thiếu tháng trước: ${vnd(r[COL.prev])}</div>`:''}${extra}
+  ${r[COL.note]?`<div class="note">${esc(r[COL.note])}</div>`:''}
+  <button class="${p?'undo':''}" data-act="${r._row}">${p?'Hủy xác nhận':'Xác nhận đã thu'}</button></div>`;
+}
+
+function stats(rows){
+  const m = {};
+  rows.forEach(r=>{const k=r[COL.course]||'(Chưa có lớp)';const o=m[k]=m[k]||{n:0,np:0,tot:0,got:0};
+    const t=Number(r[COL.total])||0;o.n++;o.tot+=t;if(paid(r)){o.np++;o.got+=t}});
+  return m;
+}
+
+function render(){
+  const v=$('#view');
+  if(S.v==='collect'){
+    const q=norm(S.q);
+    const list=S.rows.filter(r=>!q||norm(r[COL.name]).includes(q)||norm(r[COL.course]).includes(q))
+      .sort((a,b)=>paid(a)-paid(b)).slice(0,60);
+    v.innerHTML=`<input id="q" type="search" placeholder="Gõ tên học sinh hoặc khóa học" value="${esc(S.q)}" style="margin-bottom:12px">`+
+      (list.map(card).join('')||'<div class="empty">Không tìm thấy học sinh phù hợp.</div>');
+    const i=$('#q');i.oninput=()=>{S.q=i.value;const pos=i.selectionStart;render();const j=$('#q');j.focus();j.setSelectionRange(pos,pos)};
+  }else if(S.v==='dash'){
+    const all=stats(S.rows),T=Object.values(all).reduce((a,o)=>({n:a.n+o.n,np:a.np+o.np,tot:a.tot+o.tot,got:a.got+o.got}),{n:0,np:0,tot:0,got:0});
+    const pc=(a,b)=>b?Math.round(a/b*100):0;
+    v.innerHTML=`<div class="grid">
+      <div class="card"><div class="kv">Đã thu</div><div class="amt" style="color:var(--ok)">${vnd(T.got)}</div></div>
+      <div class="card"><div class="kv">Còn phải thu</div><div class="amt" style="color:var(--warn)">${vnd(T.tot-T.got)}</div></div>
+      <div class="card"><div class="kv">Tổng phải thu</div><div class="amt">${vnd(T.tot)}</div></div>
+      <div class="card"><div class="kv">Học sinh đã nộp</div><div class="amt">${T.np}/${T.n}</div></div></div>
+      <div class="card"><b>Tỷ lệ thu: ${pc(T.got,T.tot)}%</b><div class="bar"><i style="width:${pc(T.got,T.tot)}%"></i></div></div>`+
+      Object.entries(all).sort().map(([k,o])=>`<div class="card" data-cls="${esc(k)}"><div class="top"><b>${esc(k)}</b><span class="sub">${o.np}/${o.n} HS</span></div>${infoBox(k)}
+        <div class="bar"><i style="width:${pc(o.got,o.tot)}%"></i></div><div class="kv">Thu ${vnd(o.got)} / ${vnd(o.tot)}. Còn thiếu ${vnd(o.tot-o.got)}</div></div>`).join('');
+  }else{
+    const cls=Object.keys(stats(S.rows)).sort();
+    const list=S.rows.filter(r=>!paid(r)&&(!S.cls||r[COL.course]===S.cls));
+    const sum=list.reduce((a,r)=>a+(Number(r[COL.total])||0),0);
+    v.innerHTML=`<select id="cls" style="margin-bottom:12px"><option value="">Tất cả các lớp</option>${cls.map(c=>`<option ${c===S.cls?'selected':''}>${esc(c)}</option>`).join('')}</select>
+      <div class="card"><b>${list.length} học sinh chưa nộp</b>${S.cls?infoBox(S.cls):''}<div class="amt">${vnd(sum)}</div>
+      <div class="row2"><button class="ghost" id="cp">Sao chép danh sách</button><button class="ghost" id="csv">Tải CSV</button></div></div>`+
+      list.map(r=>`<div class="card"><div class="top"><b>${esc(r[COL.name])}</b><b>${vnd(r[COL.total])}</b></div><div class="sub">${esc(r[COL.course])}</div>${r[COL.note]?`<div class="note">${esc(r[COL.note])}</div>`:''}</div>`).join('');
+    $('#cls').onchange=e=>{S.cls=e.target.value;render()};
+    $('#cp').onclick=()=>{navigator.clipboard.writeText(list.map(r=>`${r[COL.course]} - ${r[COL.name]}: ${vnd(r[COL.total])}`).join('\n')).then(()=>toast('Đã sao chép'))};
+    $('#csv').onclick=()=>{const h=S.headers,q=x=>`"${String(x==null?'':x).replace(/"/g,'""')}"`;
+      const t='\uFEFF'+[h.map(q).join(',')].concat(list.map(r=>h.map(k=>q(r[k])).join(','))).join('\n');
+      const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=`chua-nop-${S.tab}.csv`;a.click()};
+  }
+}
+
+function ask(row){
+  const r=S.rows.find(x=>x._row==row),p=paid(r);
+  $('#sheet').innerHTML=`<h2>${p?'Hủy xác nhận đã nộp?':'Xác nhận đã thu học phí?'}</h2>
+    <div class="sub">${esc(r[COL.name])} - ${esc(r[COL.course])}</div><div class="amt">${vnd(r[COL.total])}</div>
+    <div class="kv">${p?'Trạng thái sẽ đổi về "Chưa nộp" trên Google Sheet.':'Trạng thái sẽ đổi thành "Đã nộp" trên Google Sheet.'}</div>
+    <button id="yes" class="${p?'undo':''}">${p?'Hủy xác nhận':'Xác nhận'}</button><button class="ghost" id="no">Đóng</button>`;
+  $('#modal').classList.add('show');
+  $('#no').onclick=()=>$('#modal').classList.remove('show');
+  $('#yes').onclick=async()=>{
+    $('#modal').classList.remove('show');
+    const old=r[COL.status],nw=p?UNPAID:PAID;
+    r[COL.status]=nw;render();toast('Đang lưu…',1500);
+    try{
+      const res=await api(null,{tab:S.tab,row:r._row,name:r[COL.name],status:nw,user:S.who});
+      if(!res.ok)throw new Error(res.error);
+      toast(p?'Đã hủy xác nhận':'Đã ghi nhận "Đã nộp"');
+    }catch(e){r[COL.status]=old;render();toast('Lưu thất bại: '+e.message,5000)}
+  };
+}
+$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+$('#login').onclick=()=>{S.pin=$('#pin').value.trim();S.who=$('#who').value.trim();localStorage.pin=S.pin;localStorage.who=S.who;start()};
+$('#tab').onchange=e=>{S.tab=e.target.value;load()};
+document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>{S.v=a.dataset.v;document.querySelectorAll('nav a').forEach(x=>x.classList.toggle('on',x===a));render();scrollTo(0,0)});
+$('#view').onclick=e=>{
+  const b=e.target.closest('[data-act]');if(b)return ask(b.dataset.act);
+  const c=e.target.closest('[data-cls]');if(c){S.cls=c.dataset.cls;document.querySelector('[data-v=report]').click()}
+};
+start();
+</script>
+</body>
+</html>
