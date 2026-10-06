@@ -46,6 +46,10 @@ nav a.on{color:var(--acc)}
 .pay{background:#F5F7FB;border-left:5px solid var(--warn);border-radius:10px;padding:10px 14px}
 .pay.ok{border-left-color:var(--ok)}
 .pay .amt{margin:2px 0}
+.sw{position:relative;margin-bottom:12px}
+.sw input{padding-right:48px;-webkit-appearance:none;appearance:none}
+.sw input::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+#qx{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;margin:0;padding:0 0 3px;border-radius:50%;background:#C3CAD6;color:#fff;font-size:22px;line-height:1}
 .empty{text-align:center;color:var(--mute);padding:30px 10px}
 #gate{padding:calc(env(safe-area-inset-top) + 80px) 24px}
 </style>
@@ -54,13 +58,13 @@ nav a.on{color:var(--acc)}
 <div id="toast"></div>
 <div id="gate" hidden>
   <h1>Thu học phí</h1>
-  <p class="sub">Nhập mã PIN để tiếp tục.</p>
+  <p class="sub">Nhập mã PIN và tên người thu. Chỉ cần làm một lần trên máy này.</p>
   <input id="pin" type="password" inputmode="numeric" placeholder="Mã PIN">
   <input id="who" placeholder="Tên người thu (ví dụ: Cô Lan)" style="margin-top:10px">
   <button id="login">Vào</button>
 </div>
 <div id="app" hidden>
-  <header><h1>Thu học phí</h1><select id="tab"></select></header>
+  <header><div style="display:flex;justify-content:space-between;align-items:center"><h1>Thu học phí</h1><a id="cfg" style="font-size:14px;opacity:.85">Cài đặt</a></div><select id="tab"></select></header>
   <main id="view"></main>
   <nav>
     <a data-v="collect" class="on">Thu tiền</a><a data-v="dash">Tổng quan</a><a data-v="report">Báo cáo</a>
@@ -68,14 +72,15 @@ nav a.on{color:var(--acc)}
 </div>
 <div id="modal"><div id="sheet"></div></div>
 
+<script src="config.js"></script>
 <script>
-// ===== CẤU HÌNH: chỉ cần sửa dòng API_URL, và tên cột nếu bạn đổi tên trong Sheet =====
-const API_URL = 'https://script.google.com/macros/s/AKfycbxcKH7POu-4CF_EXpBAVwqOsdfhw9CLcSVdeWPWgLiRrcJWr2539Ms_HBNaBX0EeLouxA/exec';
+// ===== CẤU HÌNH: tên cột tự nhận từ Sheet, chỉ sửa nếu cần =====
+const API_URL = window.API_URL_CONFIG||''; // URL nằm trong file config.js
 const COL = {course:'Khóa học', name:'Họ Tên', prev:'Thiếu tháng trước', total:'Tổng học phí', status:'Trạng thái', note:'Ghi chú', paidAt:'Ngày nộp', by:'Người thu'}; // tự cập nhật theo Sheet
 const HIDE = ['Mã HS','Ngày nộp','Người thu']; // cột có trong Sheet nhưng không hiện trên thẻ
 const PAID = 'Đã nộp', UNPAID = 'Chưa nộp';
 // =========================================================================================
-const S = {pin: localStorage.pin||'', who: localStorage.who||'', tab:'', rows:[], info:{}, headers:[], v:'collect', q:'', cls:''};
+const S = {url: API_URL, pin: localStorage.pin||'', who: localStorage.who||'', tab:'', rows:[], info:{}, headers:[], v:'collect', q:'', cls:''};
 const $ = s => document.querySelector(s);
 const vnd = n => (Number(n)||0).toLocaleString('vi-VN') + 'đ';
 const norm = s => String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();
@@ -85,13 +90,15 @@ const toast = (m,ms=3000) => {const t=$('#toast');t.textContent=m;t.style.displa
 
 async function api(params, body){
   const r = body
-    ? await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({...body,pin:S.pin})})
-    : await fetch(API_URL+'?'+new URLSearchParams({...params,pin:S.pin}));
+    ? await fetch(S.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({...body,pin:S.pin})})
+    : await fetch(S.url+'?'+new URLSearchParams({...params,pin:S.pin}));
   return r.json();
 }
 
+function showGate(){$('#app').hidden=true;$('#gate').hidden=false;$('#pin').value=S.pin;$('#who').value=S.who}
 async function start(){
-  if(!S.pin){$('#gate').hidden=false;return}
+  if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(S.url)){$('#gate').hidden=true;$('#app').hidden=false;$('#view').innerHTML='<div class="empty">Chưa cấu hình URL.<br>Mở file config.js trên GitHub và dán URL Apps Script (kết thúc bằng /exec) vào.</div>';return}
+  if(!S.pin){showGate();return}
   $('#view').innerHTML='<div class="empty">Đang tải…</div>';$('#app').hidden=false;$('#gate').hidden=true;
   try{
     const r = await api({action:'tabs'});
@@ -99,7 +106,7 @@ async function start(){
     $('#tab').innerHTML = r.tabs.map(t=>`<option>${esc(t)}</option>`).join('');
     S.tab = r.tabs[r.tabs.length-1]; $('#tab').value = S.tab;
     await load();
-  }catch(e){toast('Không kết nối được. Kiểm tra mạng và API_URL.')}
+  }catch(e){showGate();toast('Không kết nối được. Kiểm tra URL (đúng /exec) và quyền truy cập "Bất kỳ ai" của Apps Script.',9000)}
 }
 async function load(){
   $('#view').innerHTML='<div class="empty">Đang tải dữ liệu…</div>';
@@ -136,9 +143,10 @@ function render(){
     const q=norm(S.q);
     const list=S.rows.filter(r=>{if(!q)return true;const t=norm(S.headers.map(h=>r[h]).join(' '));return q.split(' ').filter(Boolean).every(w=>t.includes(w))})
       .sort((a,b)=>paid(a)-paid(b)).slice(0,60);
-    v.innerHTML=`<input id="q" type="search" placeholder="Gõ tên học sinh hoặc khóa học" value="${esc(S.q)}" style="margin-bottom:12px">`+
+    v.innerHTML=`<div class="sw"><input id="q" type="search" placeholder="Gõ tên học sinh hoặc khóa học" value="${esc(S.q)}" autocomplete="off">${S.q?'<button id="qx" aria-label="Xóa tìm kiếm">×</button>':''}</div>`+
       (list.map(card).join('')||'<div class="empty">Không tìm thấy học sinh phù hợp.</div>')+'<button class="ghost" id="dg">Kiểm tra dữ liệu</button><pre id="dgo" style="display:none;white-space:pre-wrap;font-size:12px"></pre>';
     $('#dg').onclick=()=>{const o=$('#dgo');o.textContent=JSON.stringify({cot_nhan_duoc:COL,tieu_de_trong_sheet:S.headers,so_hoc_sinh:S.rows.length,thong_tin_lop:S.info,dong_dau:S.rows.slice(0,3)},null,1);o.style.display='block'};
+    const x=$('#qx');if(x)x.onclick=()=>{S.q='';render();$('#q').focus()};
     const i=$('#q');i.oninput=()=>{S.q=i.value;const pos=i.selectionStart;render();const j=$('#q');j.focus();j.setSelectionRange(pos,pos)};
   }else if(S.v==='dash'){
     const all=stats(S.rows),T=Object.values(all).reduce((a,o)=>({n:a.n+o.n,np:a.np+o.np,tot:a.tot+o.tot,got:a.got+o.got}),{n:0,np:0,tot:0,got:0});
@@ -196,6 +204,7 @@ function ask(row){
   };
 }
 $('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+$('#cfg').onclick=showGate;
 $('#login').onclick=()=>{S.pin=$('#pin').value.trim();S.who=$('#who').value.trim();localStorage.pin=S.pin;localStorage.who=S.who;start()};
 $('#tab').onchange=e=>{S.tab=e.target.value;load()};
 document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>{S.v=a.dataset.v;document.querySelectorAll('nav a').forEach(x=>x.classList.toggle('on',x===a));render();scrollTo(0,0)});
