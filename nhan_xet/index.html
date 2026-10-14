@@ -160,11 +160,13 @@ details.bank summary::-webkit-details-marker{display:none}
 <div class="wrap">
   <header class="top">
     <div class="brand">
-      <h1>Phiếu nhận xét <span>Tin học</span></h1>
-      <p>Nhập danh sách lớp, nhận xét từng bạn, xuất Word: mỗi file 2 bạn, mỗi bạn nửa trang A4.</p>
+      <h1>Phiếu nhận xét <span>học tập</span></h1>
+      <p>Nhập danh sách lớp, nhận xét từng bạn, xuất Word: mỗi trang A4 có 2 phiếu.</p>
     </div>
-    <div class="role" role="group" aria-label="Bạn đang nhận xét với vai trò">
-      <span>Bạn là</span>
+    <div class="role" role="group" aria-label="Môn học và vai trò">
+      <span>Môn học</span>
+      <div class="seg" id="subjSeg"></div>
+      <span style="margin-left:10px">Bạn là</span>
       <div class="seg" id="roleSeg"></div>
     </div>
   </header>
@@ -175,6 +177,7 @@ details.bank summary::-webkit-details-marker{display:none}
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script>
+
 var NhanXetDocx = (function () {
   'use strict';
 
@@ -199,6 +202,12 @@ var NhanXetDocx = (function () {
   var CARD_H = 7760;                        // nửa trang, chừa chỗ cho 2 đoạn đệm
   var FONT = 'Times New Roman';
   var INK = '1F3A5F', GRID = '9AA5B1', HEAD_BG = 'E6ECF4';
+
+  var SUBJECTS_META = {
+    tinhoc: { docTitle: 'PHIẾU NHẬN XÉT HỌC TẬP – MÔN TIN HỌC', skillCol: 'Kỹ năng', projectLabel: '' },
+    robotics: { docTitle: 'PHIẾU NHẬN XÉT HỌC TẬP – ROBOTICS', skillCol: 'Tiêu chí', projectLabel: 'Chủ đề/dự án: ' }
+  };
+  function subjMeta(ctx) { return SUBJECTS_META[(ctx.meta || {}).subject] || SUBJECTS_META.tinhoc; }
 
   function esc(s) {
     return String(s == null ? '' : s)
@@ -278,7 +287,7 @@ var NhanXetDocx = (function () {
     // Hàng tiêu đề
     var head = '';
     for (var s = 0; s < 2; s++) {
-      head += txtCell(nameW, 'Kỹ năng', { b: true, shade: HEAD_BG, color: INK });
+      head += txtCell(nameW, subjMeta(ctx).skillCol, { b: true, shade: HEAD_BG, color: INK });
       LEVELS.forEach(function (lv, i) {
         head += txtCell(markW[i], lv.label, { b: true, jc: 'center', shade: HEAD_BG, color: INK, sz: 9 });
       });
@@ -323,13 +332,17 @@ var NhanXetDocx = (function () {
     var m = ctx.meta, fs = m.fontPt || 11, lh = lineTw(fs);
     var inner = '';
     if (m.school) inner += para(run(m.school, { b: true, sz: fs - 0.5, color: '4A5568' }), { jc: 'center', line: lh });
-    inner += para(run('PHIẾU NHẬN XÉT HỌC TẬP – MÔN TIN HỌC', { b: true, sz: fs + 2, color: INK }),
+    inner += para(run(subjMeta(ctx).docTitle, { b: true, sz: fs + 2, color: INK }),
       { jc: 'center', line: lineTw(fs + 2), after: 40, border: true });
     inner += para(
       run('Học sinh: ', { sz: fs }) + run(st.name || '', { b: true, sz: fs }) +
       run('     Lớp: ', { sz: fs }) + run(m.className || '', { b: true, sz: fs }) +
       run('     Kỳ nhận xét: ', { sz: fs }) + run(m.period || '', { b: true, sz: fs }),
       { line: lh, before: 40, after: 40 });
+    var sm = subjMeta(ctx), proj = String(m.project || '').trim();
+    if (sm.projectLabel && proj) {
+      inner += para(run(sm.projectLabel, { b: true, sz: fs, color: INK }) + run(proj, { sz: fs }), { line: lh, after: 40 });
+    }
     inner += skillTable(st, ctx);
     inner += para('', { line: 80 });
     inner += fieldParas(st, fs);
@@ -417,8 +430,11 @@ var NhanXetDocx = (function () {
     var m = ctx.meta, fs = m.fontPt || 11, lh = lineTw(fs);
     var skills = activeSkills(ctx);
     var rows = Math.ceil(skills.length / 2);
+    var smE = SUBJECTS_META[m.subject] || SUBJECTS_META.tinhoc;
+    var projLine = (smE.projectLabel && String(m.project || '').trim()) ? lh : 0;
     var fixed = 160                                   // lề trên/dưới ô
       + (m.school ? lh : 0)
+      + projLine
       + lineTw(fs + 2) + 40 + 20                      // tiêu đề + viền
       + lh + 80                                       // dòng thông tin
       + (skills.length ? (rows + 1) * 250 + 20 : 0)   // bảng kỹ năng
@@ -445,6 +461,9 @@ var NhanXetDocx = (function () {
 })();
 
 
+
+
+
 </script>
 <script>
 (function () {
@@ -452,7 +471,33 @@ var NhanXetDocx = (function () {
   var KEY = 'nx-tinhoc-v1', ROLE_KEY = 'nx-tinhoc-role';
   var LEVELS = NhanXetDocx.LEVELS, FIELDS = NhanXetDocx.FIELDS;
 
+  var SUBJECTS = {
+    tinhoc: {
+      label: 'Tin học ứng dụng',
+      skills: [
+        { id: 'mouse', name: 'Sử dụng chuột' },
+        { id: 'kb', name: 'Sử dụng bàn phím' },
+        { id: 'win', name: 'Thao tác Windows' },
+        { id: 'word', name: 'Soạn thảo Word' },
+        { id: 'ppt', name: 'PowerPoint' },
+        { id: 'att', name: 'Thái độ học tập' }
+      ]
+    },
+    robotics: {
+      label: 'Robotics',
+      skills: [
+        { id: 'build', name: 'Lắp ráp mô hình' },
+        { id: 'code', name: 'Lập trình' },
+        { id: 'debug', name: 'Gỡ lỗi (debug)' },
+        { id: 'think', name: 'Tư duy giải quyết vấn đề' },
+        { id: 'team', name: 'Làm việc nhóm' },
+        { id: 'att', name: 'Thái độ, sự kiên trì' }
+      ]
+    }
+  };
+
   var BANK = {
+   tinhoc: {
     strengths: [
       'Con sử dụng chuột thành thạo, thao tác nhanh và chính xác.',
       'Con nhớ vị trí các phím tốt, gõ chữ nhanh và ít sai.',
@@ -489,8 +534,46 @@ var NhanXetDocx = (function () {
       'Cho con thực hành chuột và bàn phím ở nhà, mỗi lần không quá 20 phút.',
       'Nhắc con nhớ lưu bài sau khi làm xong.'
     ]
+   },
+   robotics: {
+    strengths: [
+      'Con đọc hiểu sơ đồ lắp ráp tốt, tự lắp chính xác và chắc chắn.',
+      'Con thuộc các khối lệnh cơ bản, viết chương trình đúng yêu cầu.',
+      'Khi robot chạy sai, con tự tìm được chỗ sai và sửa lại.',
+      'Con biết chia nhỏ nhiệm vụ thành từng bước, có cách giải quyết riêng.',
+      'Con phối hợp tốt với bạn, biết lắng nghe và chia sẻ ý tưởng.',
+      'Con kiên nhẫn thử lại nhiều lần khi robot chưa chạy đúng, không nản chí.',
+      'Con chủ động đặt câu hỏi khi chưa hiểu.',
+      'Con giữ gìn thiết bị, linh kiện cẩn thận.'
+    ],
+    improve: [
+      'Con còn lúng túng khi đọc sơ đồ, cần hướng dẫn thêm từng bước lắp ráp.',
+      'Con còn nhầm lẫn giữa các khối lệnh, cần ôn lại lệnh di chuyển và lặp cơ bản.',
+      'Con dễ nản khi robot chạy sai, cần được hướng dẫn cách kiểm tra từng bước.',
+      'Con cần nhiều hỗ trợ để biết bắt đầu từ đâu khi gặp nhiệm vụ mới.',
+      'Con còn thích làm một mình, cần khuyến khích hợp tác và chia sẻ với bạn.',
+      'Con dễ bỏ cuộc khi gặp khó khăn, cần được khích lệ kiên trì hơn.',
+      'Con còn thao tác lắp ráp chậm, cần luyện thêm cho quen.'
+    ],
+    goal: [
+      'So với kỳ trước, con đã tự dùng được lệnh điều kiện mà không cần hướng dẫn lại.',
+      'Mục tiêu kỳ tới: tự gỡ lỗi chương trình mà không cần gợi ý.',
+      'Mục tiêu kỳ tới: chủ động chia sẻ ý tưởng với bạn trong nhóm.',
+      'Mục tiêu kỳ tới: hoàn thành một sản phẩm robot nhỏ từ đầu đến cuối.',
+      'Con tiến bộ rõ về tốc độ lắp ráp mô hình.',
+      'Mục tiêu kỳ tới: kiên trì thử nhiều cách hơn khi robot chưa chạy đúng.'
+    ],
+    parents: [
+      'Khuyến khích con kể lại: "Hôm nay robot của con làm được gì, gặp khó ở đâu, con đã sửa thế nào?"',
+      'Cho con xem thêm video robot đơn giản để khơi gợi hứng thú, không cần ép con hiểu lý thuyết.',
+      'Đừng làm thay khi con gặp khó; hãy hỏi gợi ý để con tự tìm cách sửa.',
+      'Khen ngợi quá trình (kiên trì, thử nhiều cách) nhiều hơn là khen kết quả.',
+      'Cho con tự kể về vai trò của mình khi làm việc nhóm ở lớp.'
+    ]
+   }
   };
 
+  function currentBank() { return BANK[state.meta.subject] || BANK.tinhoc; }
   function uid() { return Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-3); }
   function today() {
     var d = new Date();
@@ -499,15 +582,8 @@ var NhanXetDocx = (function () {
   function fresh() {
     return {
       v: 1,
-      meta: { school: '', className: '', period: '', teacher: '', assistant: '', date: today(), fontPt: 11 },
-      skills: [
-        { id: 'mouse', name: 'Sử dụng chuột', on: true },
-        { id: 'kb', name: 'Sử dụng bàn phím', on: true },
-        { id: 'win', name: 'Thao tác Windows', on: true },
-        { id: 'word', name: 'Soạn thảo Word', on: true },
-        { id: 'ppt', name: 'PowerPoint', on: true },
-        { id: 'att', name: 'Thái độ học tập', on: true }
-      ],
+      meta: { subject: 'tinhoc', school: '', className: '', period: '', project: '', teacher: '', assistant: '', date: today(), fontPt: 11 },
+      skills: SUBJECTS.tinhoc.skills.map(function (k) { return { id: k.id, name: k.name, on: true }; }),
       students: []
     };
   }
@@ -559,6 +635,9 @@ var NhanXetDocx = (function () {
 
   /* ---------- Khung: vai trò + tab ---------- */
   function renderChrome() {
+    $('#subjSeg').innerHTML = ['tinhoc', 'robotics'].map(function (k) {
+      return '<button type="button" data-subj="' + k + '" aria-pressed="' + (state.meta.subject === k) + '">' + SUBJECTS[k].label + '</button>';
+    }).join('');
     $('#roleSeg').innerHTML = ['Giáo viên', 'Trợ giảng'].map(function (r) {
       return '<button type="button" data-role="' + r + '" aria-pressed="' + (ui.role === r) + '">' + r + '</button>';
     }).join('');
@@ -573,6 +652,23 @@ var NhanXetDocx = (function () {
     ui.role = b.getAttribute('data-role');
     try { localStorage.setItem(ROLE_KEY, ui.role); } catch (err) {}
     renderChrome();
+  });
+  $('#subjSeg').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-subj]'); if (!b) return;
+    var k = b.getAttribute('data-subj'); if (k === state.meta.subject) return;
+    var apply = function () {
+      state.meta.subject = k;
+      state.skills = SUBJECTS[k].skills.map(function (sk) { return { id: sk.id, name: sk.name, on: true }; });
+      persist(); renderChrome(); render();
+      toast('Đã chuyển sang bộ tiêu chí ' + SUBJECTS[k].label);
+    };
+    var customized = state.skills.some(function (s) {
+      var def = SUBJECTS[state.meta.subject].skills.find(function (d) { return d.id === s.id; });
+      return !def || def.name !== s.name;
+    });
+    if (customized || state.students.some(hasContent)) {
+      ask('Chuyển sang bộ tiêu chí "' + SUBJECTS[k].label + '"? Danh sách kỹ năng hiện tại sẽ được thay bằng bộ mẫu của môn này (nhận xét đã viết vẫn được giữ, nhưng các mức Tốt/Khá/Cần cố gắng theo kỹ năng cũ có thể không còn khớp).', apply);
+    } else apply();
   });
   $('#tabs').addEventListener('click', function (e) {
     var b = e.target.closest('[data-tab]'); if (!b) return;
@@ -597,6 +693,7 @@ var NhanXetDocx = (function () {
       inp('Giáo viên', 'meta.teacher', m.teacher, 'Họ tên giáo viên') +
       inp('Trợ giảng', 'meta.assistant', m.assistant, 'Họ tên trợ giảng') +
       inp('Ngày ghi trên phiếu', 'meta.date', m.date, 'dd/mm/yyyy') +
+      (m.subject === 'robotics' ? inp('Chủ đề/dự án trong kỳ', 'meta.project', m.project, 'VD: Robot tránh vật cản') : '') +
       '<label class="f"><span>Cỡ chữ trong phiếu</span><select data-bind="meta.fontPt" data-num="1">' +
       [10, 11, 12].map(function (n) { return '<option value="' + n + '"' + (+m.fontPt === n ? ' selected' : '') + '>' + n + ' pt' + (n === 11 ? ' (khuyên dùng)' : '') + '</option>'; }).join('') +
       '</select></label></div></section>';
@@ -861,8 +958,8 @@ var NhanXetDocx = (function () {
     FIELDS.forEach(function (f) {
       html += '<div class="fld"><div class="lab"><span>' + f.label.replace(': ', '') + '</span><span class="muted small" style="font-weight:400">' + hints[f.key] + '</span></div>' +
         '<textarea rows="3" data-field="' + f.key + '">' + h(st[f.key]) + '</textarea>' +
-        '<details class="bank"><summary>Gợi ý câu có sẵn (' + BANK[f.key].length + ')</summary><div class="chips">' +
-        BANK[f.key].map(function (c) { return '<button type="button" class="chip" data-chip="' + h(c) + '" data-chip-key="' + f.key + '">' + h(c) + '</button>'; }).join('') +
+        '<details class="bank"><summary>Gợi ý câu có sẵn (' + currentBank()[f.key].length + ')</summary><div class="chips">' +
+        currentBank()[f.key].map(function (c) { return '<button type="button" class="chip" data-chip="' + h(c) + '" data-chip-key="' + f.key + '">' + h(c) + '</button>'; }).join('') +
         '</div></details></div>';
     });
 
@@ -889,8 +986,13 @@ var NhanXetDocx = (function () {
     var pv = $('#pv'); if (pv) pv.innerHTML = previewHtml(st);
     var it = $('.item[data-pick="' + st.id + '"] .dot'); if (it) it.className = 'dot st-' + statusOf(st);
   }
+  var PREVIEW_TITLES = {
+    tinhoc: { t: 'PHIẾU NHẬN XÉT HỌC TẬP – MÔN TIN HỌC', c: 'Kỹ năng' },
+    robotics: { t: 'PHIẾU NHẬN XÉT HỌC TẬP – ROBOTICS', c: 'Tiêu chí' }
+  };
   function previewHtml(st) {
     var m = state.meta, fs = +m.fontPt || 11;
+    var pt = PREVIEW_TITLES[m.subject] || PREVIEW_TITLES.tinhoc;
     var sk = state.skills.filter(function (s) { return s.on !== false && s.name; });
     var rows = Math.ceil(sk.length / 2);
     function cellsFor(s) {
@@ -900,7 +1002,7 @@ var NhanXetDocx = (function () {
     }
     var tbl = '';
     if (sk.length) {
-      tbl = '<table><tr>' + ('<th style="width:24.5%">Kỹ năng</th><th class="c" style="width:7%">Tốt</th><th class="c" style="width:7%">Khá</th><th class="c" style="width:11.5%">Cần cố gắng</th>').repeat(2) + '</tr>';
+      tbl = '<table><tr>' + ('<th style="width:24.5%">' + pt.c + '</th><th class="c" style="width:7%">Tốt</th><th class="c" style="width:7%">Khá</th><th class="c" style="width:11.5%">Cần cố gắng</th>').repeat(2) + '</tr>';
       for (var r = 0; r < rows; r++) tbl += '<tr>' + cellsFor(sk[r * 2]) + cellsFor(sk[r * 2 + 1]) + '</tr>';
       tbl += '</table>';
     }
@@ -909,11 +1011,13 @@ var NhanXetDocx = (function () {
         return '<p>' + (i === 0 ? '<b>' + h(f.label) + '</b>' : '') + h(p) + '</p>';
       }).join('');
     }).join('');
+    var projLine = (m.subject === 'robotics' && String(m.project || '').trim())
+      ? '<p><b>Chủ đề/dự án: </b>' + h(m.project) + '</p>' : '';
     return '<div class="sheet" style="font-size:calc(var(--pt)*' + fs + ')">' +
       (m.school ? '<div class="sch">' + h(m.school) + '</div>' : '') +
-      '<div class="ttl" style="font-size:calc(var(--pt)*' + (fs + 2) + ')">PHIẾU NHẬN XÉT HỌC TẬP – MÔN TIN HỌC</div>' +
+      '<div class="ttl" style="font-size:calc(var(--pt)*' + (fs + 2) + ')">' + pt.t + '</div>' +
       '<div class="inf">Học sinh: <b>' + h(st.name) + '</b> &nbsp; Lớp: <b>' + h(m.className) + '</b> &nbsp; Kỳ nhận xét: <b>' + h(m.period) + '</b></div>' +
-      tbl + '<div style="height:calc(var(--pt)*4)"></div>' + fields +
+      projLine + tbl + '<div style="height:calc(var(--pt)*4)"></div>' + fields +
       '<div class="sg"><span><b>Giáo viên:</b> ' + h(m.teacher) + '</span><span><b>Trợ giảng:</b> ' + h(m.assistant) + '</span><i>' + (m.date ? 'Ngày ' + h(m.date) : '') + '</i></div></div>';
   }
 
@@ -926,7 +1030,8 @@ var NhanXetDocx = (function () {
     return out;
   }
   function baseName() {
-    var parts = ['NhanXet', ascii(state.meta.className), ascii(state.meta.period)].filter(Boolean);
+    var tag = state.meta.subject === 'robotics' ? 'Robotics' : '';
+    var parts = ['NhanXet', tag, ascii(state.meta.className), ascii(state.meta.period)].filter(Boolean);
     return parts.join('_');
   }
   var dlCap = undefined;
@@ -945,6 +1050,7 @@ var NhanXetDocx = (function () {
       $('#view').innerHTML = html + '<div class="empty">Chưa có học sinh. Hãy nhập danh sách ở bước "Lớp học".</div></section>'; return;
     }
     var notDone = state.students.length - done;
+    html += '<div id="dlnote"></div>';
     html += '<div class="row" style="margin-bottom:14px"><label class="row small" style="cursor:pointer"><input type="checkbox" id="onlyDone"' + (exportOpts.onlyDone ? ' checked' : '') + '> Chỉ xuất các bạn đã bấm "Xong" (' + done + ' bạn)</label></div>';
     if (notDone > 0 && !exportOpts.onlyDone) html += '<div class="notice">Còn ' + notDone + ' bạn chưa bấm "Xong". Phiếu của các bạn này vẫn được xuất (phần chưa viết để trống).</div>';
     html += '<div class="row"><button type="button" class="btn primary" data-act="dl-all"' + (ps.length ? '' : ' disabled') + '>Tải file Word (' + baseName() + '.docx)</button>' +
@@ -954,18 +1060,15 @@ var NhanXetDocx = (function () {
     }).join('') + '</div></section>';
     $('#view').innerHTML = html;
     $('#onlyDone').addEventListener('change', function (e) { exportOpts.onlyDone = e.target.checked; renderExport(); });
-  }
-  function browserSave(name, data) {
-    var blob = data instanceof Blob ? data : new Blob([data], { type: 'application/json' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob); a.download = name;
-    document.body.appendChild(a); a.click();
-    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
-    return true;
+    getDownloads().then(function (d) {
+      if (!d) {
+        var n = $('#dlnote'); if (n) n.innerHTML = '<div class="notice">Trang này cần mở trong Claude để tải file trực tiếp. Nếu nút tải không hoạt động, hãy mở lại trang từ liên kết trong Claude.</div>';
+      }
+    });
   }
   function saveFile(name, data) {
     return getDownloads().then(function (d) {
-      if (!d) return browserSave(name, data);   // chạy độc lập (GitHub Pages, mở file trực tiếp)
+      if (!d) { toast('Không thể tải file ở chế độ xem này.'); return false; }
       return d.save({ filename: name, data: data }).then(function () { return true; }, function (err) {
         toast(err && err.code === 'declined' ? 'Bạn đã hủy tải file.' : 'Không tải được file (' + ((err && err.code) || 'lỗi') + ').');
         return false;
