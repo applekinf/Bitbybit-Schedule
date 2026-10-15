@@ -1066,9 +1066,17 @@ var NhanXetDocx = (function () {
       }
     });
   }
+  function browserSave(name, data) {
+    var blob = data instanceof Blob ? data : new Blob([data], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    return true;
+  }
   function saveFile(name, data) {
     return getDownloads().then(function (d) {
-      if (!d) { toast('Không thể tải file ở chế độ xem này.'); return false; }
+      if (!d) return browserSave(name, data);   // chạy độc lập (GitHub Pages, mở file trực tiếp): tải theo cách thường của trình duyệt
       return d.save({ filename: name, data: data }).then(function () { return true; }, function (err) {
         toast(err && err.code === 'declined' ? 'Bạn đã hủy tải file.' : 'Không tải được file (' + ((err && err.code) || 'lỗi') + ').');
         return false;
